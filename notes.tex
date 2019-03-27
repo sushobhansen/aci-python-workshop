@@ -129,19 +129,109 @@ If you prefer not to install anything on your computer but would rather run Pyth
 \newpage
 
 \section{Variables in Python}
-Python defines the following types of variables:
+\subsection{Data Types}
+Python defines the following data types for variables:
 
 \begin{center}
-\begin{tabular}{|l|l|l|l|}
+\begin{tabular}{|p{0.75in}|p{1in}|p{1.5in}|p{1.5in}|}
 \hline
-Variable & Syntax & Description & Comments \\ \hline
+\textbf{Data Type} & \textbf{Syntax} & \textbf{Description} & \textbf{Comments} \\ \hline
+Integer & \code{x = 5} & Signed integer & Use \code{int} to typecast, if valid \\ \hline
+Float & \code{x = 5.} & IEEE floating point number & Use \code{float} to typecast, if valid \\ \hline
+Complex & \code{x = 3.1+4.6j} & Complex number & Use \code{complex} to typecast, if valid \\ \hline
+String & \code{x = 'Hello World!'} & Strings are always enclosed within quotation marks & Use \code{str} to typecast, slicing operator valid \\ \hline
+List & \code{x = [1, 2.2, 'otter']} & \textbf{Mutable} list of variables of any type & Use \code{list()} to typecast, if valid \\ \hline
+Tuple & \code{x = (1, 2.2, 'otter')} & Immutable tuple of variables of any tupe & Use \code{tuple()} to typecast, if valid \\ \hline
+Dictionary & \texttt{x = \{'one':1, 'two':2\}} & Key-value pairs & Use \code{get()} to get \code{value} from \code{key}, use \code{dict()} to typecast, if valid \\ \hline
+Bool & \code{x = True} & Boolean value & Python uses keywords \code{True} and \code{False}, not 1 and 0 \\ \hline
 
 \end{tabular}
 \end{center}
 
+\subsection{Creating a variable}
+Variables are usually given a name, which is any string of characters you use to call it. Any string of characters is a valid name, although there are a couple of rules to follow:
+
+\begin{enumerate}
+	\item The name \textbf{cannot} contain spaces - consider using an underscore character or chamelCase instead for readability
+	\item The name cannot start with a number, but can contain a number anywhere
+	\item The name is case-sensitive, so \code{temp} and \code{Temp} are different variables
+	\item Python has a number of reserved keywords (see documentation, of just follow along and you'll get the hang of it), which cannot be used as names
+\end{enumerate}
+
+Creating a variable is as simple as giving it a name, and assigning a value to it. For example, run this piece of code:
+
 \begin{lstlisting}[frame=single] 
-for i in range(0,1):
-	print(i)
+x = 1.0
+y = 'Hello, World!'
+z = (x==y)
+print(type(x),type(y),type(z),z)
 \end{lstlisting}
+
+Here, we defined three variables: \code{x} of type \code{int}, \code{y} of type \code{str}, and \code{z} of type \code{bool}. Note that the \code{==} is a comparison operator that compares two values, while \code{=} is an assignment operator that assigns a value to a variable. The \code{print()} function, as the name suggests, prints the comma-separated inputs as a string , while the \code{type()} function returns the data type of the input. Note that every new line of code in Python starts on a new line, and \textbf{there is no end of line character} (such as a semi-colon in many languages).
+
+\subsection{Mutability}
+
+Some Python data types are \textbf{immutable}. This means that, once defined, ibjects of those types cannot be changed without creating a new object entirely. Most objects are immutable: \code{int, float, complex, str, bool, tuple} are immutable. If you try to change their values, you will either get an error or a new object containing the new value will be created. For example, run the following code, where \code{id()} is a function that returns the memory location of the object passed to it:
+
+\begin{lstlisting}[frame=single] 
+x = 1
+print(id(x))
+x = 2.0
+print(id(x))
+\end{lstlisting}
+
+You'll see that the memory location of \code{x} has changed entirely, instead of just the value being changed. This is because \code{x} was defined as type \code{int}, which is immutable. Similarly, try changing the value inside a tuple and see what happens (note that \code{x[0]} is a way to reference the first element of \code{x} - \textbf{Python is zero-indexed}):
+
+\begin{lstlisting}[frame=single] 
+x = (1,2,3)
+x[0] = 10
+print(x)
+\end{lstlisting}
+
+Lists and dictionaries are mutable, which means their values can be changed at any time. Try running the following code and compare it to the last one: 
+
+\begin{lstlisting}[frame=single] 
+x = [1,2,3]
+print(id(x))
+x[0] = 10
+print(id(x))
+print(x)
+\end{lstlisting}
+
+\subsection{Operations on Variables}
+Python provides a number of operations that can be performed between variables:
+
+\begin{itemize}
+	\item \textbf{Arithmetic operators:} + (add), - (subtract), * (multiply), / (divide), \% (modulus or remainder), // (floor division), ** (exponent)
+	\item \textbf{Comparison operators:} $>$ (grater than), $<$ (less than), == (equal to), != (not equal to), $>=$ (greater than or equal to), $<=$ (less than or equal to)
+	\item \textbf{Logical operators:} \code{and}, \code{or}, and \code{not}
+	\item \textbf{Bitwise operators:} \& (bitwise AND), \textbar\ (bitwise OR), $\sim$ (bitwise NOT),  (bitwise XOR), $>>$ (bitwise right shift), $<<$ (bitwise left shift)
+	\item \textbf{Assignment operators:} A combination of the basic assignment operator (=) and an optional arithmetic or bitwise operator. For example, \code{x **= 5} is the same as \code{x = x**5}
+	\item \textbf{Special operators:} \code{is} or \code{is not} check if two variables have the same memory address, \code{in} or \code{not in} check if a variable is in a sequences of variables
+\end{itemize}
+
+Operators are mostly self-explanatory, but their behavior can be different based on the data type of the input variables. Consider adding two integers, adding an integer to a float, adding two strings, and adding an integer to a string, all of which use the same + operator:
+
+\begin{lstlisting}[frame=single] 
+x = 2
+print(x+2)
+print(x+2.5)
+print('Goodbye'+'Hello')
+print(x+'Hello')
+\end{lstlisting}
+
+The first operation is as expected and returns an integer. In the second operation, \code{x} is first typecast to \code{float} \textit{implicitly} (the program does it by itself) and then added to another float to return a float. In the third operation, two strings are simply concatenated together to return another string. 
+
+However, the last operation of adding an integer to a string returns an error, because Python is unable to figure out which variable to cast to which type. Of course, casting a string to an integer makes no sense, but Python doesn't even try, because it's unsure about what to do. You can help it by \textit{explicitly} casting \code{x} from an integer to string, and then see what happens:
+
+\begin{lstlisting}[frame=single] 
+x = 2
+print(str(x)+'Hello')
+\end{lstlisting}
+
+\newpage
+
+\section{Control Statements}
+Control statements are blocks of code that are used to control the flow of the program. 
 
 \end{document}
