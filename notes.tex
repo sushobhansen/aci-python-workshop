@@ -4,6 +4,7 @@
 \usepackage{color}
 \usepackage{amsmath}
 \usepackage{graphicx}
+\newcommand{\code}{\texttt}
 
 \usepackage{lastpage}
 
@@ -63,6 +64,8 @@
 	\end{Large}
 \end{titlepage}
 
+Copyright \copyright\ 2019, Sushobhan Sen
+
 \doclicenseThis
 \newpage
 
@@ -70,6 +73,7 @@
 \newpage
 
 \section{Introduction}
+\subsection{Why Python?}
 The Python programming language was conceived in the 1980s and the first implementation was deployed in 1991 by Guido van Rossum at Centrum Wiskunde \& Informatica (CWI) in the Netherlands. Python is designed to be a high-level, interpreted, general-purpose computer programming language with exception-handling and the ability to be extended by users. Crucially, Python is an open-source language, meaning anybody can see the code behind it. Python today is a very popular language is a broad variety of disciplines: machine learning, web development, Geographical Information Systems (GIS), engineering, database management, high performance computing, etc.
 
 Python 2.0, which truly launched the popularity of the language, was released in 2000, with the last version in the series, Python 2.7, set to be phased out in 2020. The current recommended standard as of when I wrote this is Python 3.7.2, which is crucially \textbf{not backwards compatible} with Python 2.x. All subversions of Python 3.x are backwards compatible though, so feel free to update regularly.
@@ -77,6 +81,63 @@ Python 2.0, which truly launched the popularity of the language, was released in
 (The above information was taken from \href{https://en.wikipedia.org/wiki/Python_(programming_language)}{Wikipedia})
 
 The beauty of Python is its ease - the syntax is extremely simple as compared to many other popular programming languages. It is often said, not entirely without truth, that the difference between Python code and pseudo-code is merely the indentation. Thus, the language is very easy to learn for programming novices. However, its ease should not be misconstrued to mean that it is only for easy or trivial applications: Python is an extremely powerful language with a wide variety of applications, it has extensive documentation, and its open-source nature ensures that new features are being developed continuously while bugs are also being fixed.
+
+\subsection{Learning Objectives}
+This workshop is broken up into two sessions:
+
+\begin{enumerate}
+	\item A Basic Python session for beginners with zero knowledge of programming in any language
+	\item An Advanced Python session for those with prior knowledge of Python programming
+\end{enumerate}
+
+At the end of the \textbf{Basic Python} session, participants will be able to:
+
+\begin{enumerate}
+	\item List the types of Python variables and define them
+	\item Add control statements (\code{if-then-else}) and \code{for} loops to their program
+	\item Define and use functions
+	\item Define and use object oriented programming
+\end{enumerate}
+
+At the end of the \textbf{Advanced Python} session, participants will be able to:
+
+\begin{enumerate}
+	\item Use the \code{numpy} library to define and use matrices, and read and process data from files
+	\item Use the \code{pandas} library to read and process data
+	\item Use the \code{scipy} library to solve a system if linear equations and implement other useful scientific functions
+	\item Use the \code{matplotlib} library to create publication-quality plots
+\end{enumerate}
+
+The lists above ware what I will try to accomplish in our two two-hour long sessions. Depending on how quickly the workshop goes, I may or may not be able to meet all the learning objectives. However, I will get you along far enough so that you can complete any remaining items on your own.
+
+\subsection{Installing Python}
+The easiest and \textbf{recommended} way to get all popular Python libraries and IDEs is by downloading and installing the latest \href{https://www.anaconda.com/distribution/}{Anaconda distribution} for your computer. Make sure to download the latest version corresponding to Python 3.x.
+
+Alternatively, you can install and use Python using the terminal: 
+
+\begin{itemize}
+	\item On Windows 10, activate \href{https://docs.microsoft.com/en-us/windows/wsl/install-win10}{Windows Subsystem for Linux}
+	\item On Mac OS or any UNIX-like OS (such as Linux), just run your favorite Terminal application
+\end{itemize}
+
+Then install \href{https://jupyter.org/install}{Jupyter} with \code{pip}. With any other version of Windows (which you should not be using for too long on your personal computers anyway for security reasons), Anaconda is your best option.
+
+Once installed, you can now create a new notebook. If you installed Anaconda, open the Anaconda Prompt, navigate to your directory, and use the \code{jupyter notebook} command. If you choose to use the terminal, follow the same steps on the terminal. Both methods will launch Jupyter Notebooks in your browser. From there, you can create a new Notebook.
+
+If you prefer not to install anything on your computer but would rather run Python remotely from your browser, you can use the Online IDE from \href{https://repl.it/languages/python3}{repl.it}. This doesn't always work very well though. Any other online IDE that you find should be OK too.
+
+\newpage
+
+\section{Variables in Python}
+Python defines the following types of variables:
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|}
+\hline
+Variable & Syntax & Description & Comments \\ \hline
+
+\end{tabular}
+\end{center}
 
 \begin{lstlisting}[frame=single] 
 for i in range(0,1):

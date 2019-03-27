@@ -16,4 +16,7 @@ Then install [Jupyter](https://jupyter.org/install) with `pip`. With any other v
 ## Running a Notebook
 If you installed Anaconda, open the Anaconda Prompt, navigate to your directory, and use the `jupyter notebook` command. If you choose to use the terminal, follow the same steps on the terminal. Both methods will launch Jupyter Notebooks in your browser. From there, you can create a new Notebook.
 
+## Running Python Remotely
+If you prefer not to install anything on your computer but would rather run Python remotely from your browser, you can use the Online IDE from [Repl.it](https://repl.it/languages/python3). This doesn't always work very well though. Any other online IDE that you find should be OK too.
+
 
