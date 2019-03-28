@@ -379,6 +379,15 @@ for i,j,k in zip(x,y,z):
 
 Here, the \code{zip()} function (see \href{https://docs.python.org/3.3/library/functions.html#zip}{documentation}) takes three lists (or technically, iterable objects) \textit{of the same length} (or it truncates to the shortest length) and combines them into an iterable object of tuples, with each tuple having three members. Then, the \code{for} loop \textbf{unpacks} the tuples into the constituent members, which can then be iterated over \textit{simultaneously}. Python also provides several functions to efficiently create complex iterable objects through the itertools package (see \href{https://docs.python.org/3/library/itertools.html}{documentation}). We'll see how to import a package later.  
 
+Finally, because the \code{for} loop is based on an iterator, it can actually be used anywhere in a line of code, and not just in a formal loop. Consider the following piece of code, which creates a list of the squares of the first five whole numbers in just one line:
+
+\begin{lstlisting}[frame=single] 
+x = [i**2 for i in range(5)]
+print(x)
+\end{lstlisting}
+
+This feature makes writing Python loops particularly elegant and simple.
+
 \newpage
 \section{Functions}
 In just a few pages, we've already learned all the basic building blocks on any Python code. 
