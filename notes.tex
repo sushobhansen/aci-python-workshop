@@ -38,7 +38,8 @@
         commentstyle=\color{comments},
         stringstyle=\color{red},
         showstringspaces=false,
-        identifierstyle=\color{green}}
+        identifierstyle=\color{green},
+        numbers=left}
         
 %%%----------------------------------
 
@@ -148,7 +149,7 @@ Bool & \code{x = True} & Boolean value & Python uses keywords \code{True} and \c
 \end{tabular}
 \end{center}
 
-\subsection{Creating a variable}
+\subsection{Creating a Variable}
 Variables are usually given a name, which is any string of characters you use to call it. Any string of characters is a valid name, although there are a couple of rules to follow:
 
 \begin{enumerate}
@@ -232,6 +233,154 @@ print(str(x)+'Hello')
 \newpage
 
 \section{Control Statements}
-Control statements are blocks of code that are used to control the flow of the program. 
+Control statements are blocks of code that are used to control the flow of the program - that could mean skipping some lines, or repeating some lines a certain number of times. There are two main types of control statements:
+
+\begin{enumerate}
+	\item \textbf{Conditional statements}: Better known as if-else blocks, these test a condition before executing a line
+	\item \textbf{Loops}: These repeatedly execute a line for a certain number of times or till a break condition is met 
+\end{enumerate}
+
+We'll look at each of these below.
+
+\subsection{Conditional Statements}
+The most basic control statement is an \code{if} statement, which checks a condition and executes the code after it only if the condition evaluates \code{True}. Consider the following block of code:
+
+\begin{lstlisting}[frame=single] 
+x = 6
+if x<5:
+    print('x is less than 5')
+    print('Finished evaluating if block')
+print('Finished this code block')
+\end{lstlisting}
+
+First, notice the syntax: the \code{if} statement starts with the word itself, followed by a space, and followed by the condition (\code{x<5}). This line then ends with a colon (:), signifying that things after the colon are to be executed if the condition returns \code{True}. But how do you tell Python what lines of code are part of the \code{if}-statement to be executed, and what are not? In other words, how do you signify the scope of the \code{if}-statement? In this case, we want the two \code{print()} statements after the \code{if}-statement to be executed only if the condition return \code{True}, while the third \code{print()} statement to be executed regardless. How do we tell it to do that?
+
+That's where indentation (a tab character, usually four spaces long) comes into play. In many computer languages, a whitespace like a tab character is simply ignored. However, in Python, it is an \textit{integral part} of the code - \textbf{this is a major different between Python and other languages!} Mistakes made with indentation can and will return an error, so be careful. 
+
+Now, coming back to the code. We want the first two \code{print()} statements to be executed only if the condition is True, so we indent them by one level (one tab character) with respect to the indentation level of the \code{if}-statement. The additional indentation level makes these lines associated with the parent line. Whereas, we don't want to last \code{print()} statement to be associated with the \code{if}-statement, so we keep it at the same indentation level as the statement, signifying that there is no association or dependency between them. This can seem confusing at first, but it is a very elegant way of writing code and is indeed, almost the same as writing pseudo-code.
+
+To drive home the point, let's put an \code{if}-statement within another \code{if}-statement:
+
+\begin{lstlisting}[frame=single] 
+x = 6
+if x<5:
+    print('x is less than 5')
+    print('Finished evaluating outer if block')
+    
+    if x>2:
+        print('but x is greater than 2')
+        print('Finished evaluating inner if block')
+print('Finished this code block')
+\end{lstlisting}
+
+Now see the indentation here. The inner \code{if}-statement is one indentation level after the outer one, indicating that it will be executed only if the outer condition is true. And the \code{print()} statements associated with the inner statement is at yet another indentation level (two tab characters) or one character after the inner \code{if}-statement, indicating that they will be executed only if the inner statement is true. This indentation, unlike a lot of languages, is \textbf{not optional}. Python has no other way of knowing which lines of code are associated with which control statement without proper indentation. 
+
+The code above is simple enough, but can actually be combined by using a logical operator to combine both \code{if}-statements:
+
+\begin{lstlisting}[frame=single] 
+x = 6
+if x<5 and x>2:
+    print('x is less than 5 and greater than 2')
+    print('Finished evaluating  if block')
+print('Finished this code block')
+\end{lstlisting}
+
+Thus, logical operators can be used to write more concise conditional statements, and they can even be nested together into increasingly complex conditions.
+
+It is however common for conditional evaluations to be binary in nature - if something is true, do this thing, or else do this other thing. In principle, this could be achieved by using two \code{if}-statements one after the other:
+
+\begin{lstlisting}[frame=single] 
+x = 6
+if x<5:
+    print('x is less than 5')
+if x>5:
+    print('x is greater than 5')
+print('Finished this code block')
+\end{lstlisting}
+
+However, this is an unnecessary evaluation: if \code{x<5} is \code{False}, it automatically follows that \code{x>5} is \code{True} (except for one case, which we'll see in a bit), so there's no need to check again. Thus, Python has an \code{if-else} statement that implements just that idea:
+
+\begin{lstlisting}[frame=single] 
+x = 6
+if x<5:
+    print('x is less than 5')
+else:
+    print('x is greater than 5')
+print('Finished this code block')
+\end{lstlisting}
+
+Note again how the line after \code{else} is indented after the colon, signifying an association between the two.
+
+If you're alert, you'll nice that \code{x==5} is a third possibility. We could add another \code{if} statement for it, or we could group the three conditions together into an \code{if-elif-else} block:
+
+\begin{lstlisting}[frame=single] 
+x = 6
+if x<5:
+    print('x is less than 5')
+elif x>5:
+    print('x is greater than 5')
+else:
+    print('x is equal to 5')
+print('Finished this code block')
+\end{lstlisting}
+
+Here, "elif" is short for "else if". It is not necessary to use \code{elif} statements, but it is recommended because it makes the code more readable. Once again, notice the indentation and which lines are associated with which. 
+
+Note that the last else statement could've been replaced with an \code{elif x==5:} statement. However, it is usually good practice to end the \code{if-elif-else} block with an \code{else} statement as a fail-safe case to catch all other possible outcomes, both expected and unexpected.
+
+\subsection{Loops}
+Loops are blocks of code that are executed repeatedly either for a fixed number of times, or till a break condition is satisfied. Loop statements offer a convenient way to execute code repeatedly without having to write very long, unwieldy programs. Python offers two types of loops: \code{while} and \code{for} loops. Let's look at these individually. 
+
+\code{While} loops execute a block of statements (grouped by indentation) as long as a condition is true. Consider the following code, which prints a number and increments it until it reaches a threshold:
+
+\begin{lstlisting}[frame=single] 
+x = 3
+while(x<6):
+    print('The value of x is ',x)
+    x+=1
+\end{lstlisting}
+
+Here, \code{x} is set to 3. When the \code{while} loop begins, the condition \code{x<6} is evaluated and if it is true, the associated lines of code (which are indented by one level more than the \code{while} statement) are executed. In this case, the condition is true, so first the value of \code{x} is printed, and then it is incremented by 1. At this point, control returns (or 'loops back') to the \code{while} statement, and the condition is evaluated again. This is why it's called a loop. The loop continues to iterate until the condition is \code{False}, at which point any code after the loop and its associated lines are executed till the program ends.
+
+\code{While} loops are used when the number of times the code has to run is unknown. However, a more common case is that the lines of code are executed for a fixed number of times. The \code{While} loop could be 'hacked' by coming up a with a condition that runs for a fixed number of times (like the example above), but there's a better way: \code{for} loops. These types of loops are extremely common, and most programming languages offer them. Compared to many other popular languages though, Python's \code{for} loop works a little differently: it is an iterator-based loop, similar to the \code{foreach} loop provided in C\# and VBA, or a version of the \code{for} loop in Java. It is not the same as the \code{for} loop used in C/C++.
+
+An iterator is a specific type of Python object that allows the program to traverse through all the elements in a sequence (tuples, lists, or dictionaries), regardless of how that sequence is implemented. And since sequences have a fixed length at any point of time in a code, iterating through them is equivalent to running a loop for a fixed number of times. Consider the following block of code:
+
+\begin{lstlisting}[frame=single] 
+x = range(3)
+print(list(x))
+for i in x:
+    print('The value of i is ',i)
+\end{lstlisting}
+
+Here, \code{range()} is a function that returns a fixed number of \textit{integers} (\textit{not floats}), \textit{starting from 0 by default}, although the default behavior can be modified (see \href{https://docs.python.org/3/library/functions.html#func-range}{documentation}). The return type is an iterable \code{range} object, which can be cast into a list type to see its contents - in this case, it's a list \code{[0,1,2]}.
+
+Next, the \code{for} loop defines a variable \code{i} which is in \code{x}. This means that the variable \code{i} traverses through each the value in \code{x} in each iteration, until it runs out of values to traverse. Execute the function to print \code{i} and see this for yourself. 
+
+The beauty of this approach in Python and perhaps the most startling difference between it and the \code{for} loop in C/C++ is that the iterator can have any implementation - it can contain anything, not just numbers! Consider this example:
+
+\begin{lstlisting}[frame=single] 
+for i in ['Harry',(0,1,2),1]:
+    print(i)
+\end{lstlisting}
+
+Here, \code{i} iterates over a list, which itself is composed of three items of three different data types: a string, a tuple (yes, a list can hold a tuple, or even another list), and an integer. And it does this naturally, without any additional code or typecasting necessary. This is a really big deal!
+
+And it gets better - a single \code{for} loop can have more than one loop variable. Consider the following example:
+
+\begin{lstlisting}[frame=single] 
+x = [0,1,2]
+y = [10,11,12]
+z = [21,22,23]
+print(list(zip(x,y,z)))
+for i,j,k in zip(x,y,z):
+    print(i,'+',j,'+',k,'=',i+j)
+\end{lstlisting}
+
+Here, the \code{zip()} function (see \href{https://docs.python.org/3.3/library/functions.html#zip}{documentation}) takes three lists (or technically, iterable objects) \textit{of the same length} (or it truncates to the shortest length) and combines them into an iterable object of tuples, with each tuple having three members. Then, the \code{for} loop \textbf{unpacks} the tuples into the constituent members, which can then be iterated over \textit{simultaneously}. Python also provides several functions to efficiently create complex iterable objects through the itertools package (see \href{https://docs.python.org/3/library/itertools.html}{documentation}). We'll see how to import a package later.  
+
+\newpage
+\section{Functions}
+In just a few pages, we've already learned all the basic building blocks on any Python code. 
 
 \end{document}
