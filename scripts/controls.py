@@ -116,3 +116,6 @@ for i,j,k in zip(x,y,z):
 
 
 
+ # ## In-line for loop
+ x = [i**2 for i in range(5)]
+print(x)
