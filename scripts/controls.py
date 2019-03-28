@@ -112,10 +112,29 @@ for i,j,k in zip(x,y,z):
     print(i,'+',j,'+',k,'=',i+j)
 
 
+# ## In-line for loop
+
+# In[3]:
+
+x = [i**2 for i in range(5)]
+print(x)
+
+
+# ## Break, continue, and pass
+
+# In[1]:
+
+for x in range(10):
+    if x==3:
+        continue
+    if x==5:
+        pass
+    if x==8:
+        break
+    print(x)
+
+
 # In[ ]:
 
 
 
- # ## In-line for loop
- x = [i**2 for i in range(5)]
-print(x)

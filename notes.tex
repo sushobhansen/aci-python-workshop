@@ -388,6 +388,30 @@ print(x)
 
 This feature makes writing Python loops particularly elegant and simple.
 
+\subsection{Break, Continue, and Pass}
+Python provides three more useful features for loops:
+
+\begin{itemize}
+	\item \textbf{Break}: When executed, the code breaks out of the loop without performing any more iterations
+	\item \textbf{Continue}: When executed, the code skips everything after that line and returns to the top of the loop to perform the next iteration
+	\item \textbf{Pass}: When executed, the just ignores that line, but continues to execute to the rest of the code for that iteration (good for use as a placeholder)
+\end{itemize}
+
+The following code succinctly demonstrates all three statements:
+
+\begin{lstlisting}[frame=single] 
+for x in range(10):
+    if x==3:
+        continue
+    if x==5:
+        pass
+    if x==8:
+        break
+    print(x)
+\end{lstlisting}
+
+Here, integers from 0 to 9 are iterated over the variable \code{x} and in general, the value of the integer is printed. However, when \code{x==3}, the loop reaches a \code{continue} statement, which means that the rest of the code is not executed and so 3 is not printed, while the loop continues with the next value. When \code{x==5}, a \code{pass} statement is executed, so the rest of the code is executed and 5 is printed and the loop continues. Finally, when \code{x==8}, a \code{break} statement is encountered, which forces to loop to end without being executed for the last value, 9. Try it yourself to see.
+
 \newpage
 \section{Functions}
 In just a few pages, we've already learned all the basic building blocks of any Python program. Now, we can move to higher abstractions. These abstractions are useful in making code more efficient, readable, and modifiable, and while they are strictly speaking not necessary write a program, they are used universally to write a \textit{good} program.
@@ -563,6 +587,9 @@ The definition  of the child class is followed by defining an object in the main
 
 \newpage
 \section{Challenge: Basic Python}
+That's all you needed to know about Python! Well, that's all the theory anyway. Like a human language, programming languages cannot be learned by listening to someone in a classroom or reading a book. They can only be learned through practice, and Python is no different. You can find a good list of practice exercises \href{https://www.practicepython.org/}{here}. In this section though, we'll solve one problem using all the tools we've learned so far.
+
+\subsection{Problem Statement}
 
 
 \end{document}
