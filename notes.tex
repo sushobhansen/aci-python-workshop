@@ -478,6 +478,91 @@ This code defines a function \code{addnumber()}, which is similar to the \code{a
 
 \newpage
 \section{Classes and Objects}
-The last abstraction that is useful but not necessary is classes, and objects created from those classes. Think of a class as a set of related variables and functions that are logically grouped together. 
+The last abstraction that is useful but not necessary is classes, and objects created from those classes. Think of a class as a set of related variables and functions that are logically grouped together, and \textbf{an object as an instance of a class}. Let's take a concrete example: a person. What are the characteristics of a person? Their name, age, and height. Let's say the height is in centimeters, and we'd like a function to tell us what it is in feet and inches. These variables and functions can be grouped together into a logical class, and then we can create objects from those classes for every person we have data for. Let's put this into practice below. 
+
+\subsection{Defining a Class}
+The \code{Person} class described above is constructed in the following code, after which an object is created from it:
+
+\begin{lstlisting}[frame=single] 
+class Person:   
+    def __init__(self,name,age,height_cm):
+        self.name = name
+        self.age = age
+        self.height_cm = height_cm #in centimeters
+    
+    def print_name(self):
+        print(self.name)
+    
+    def print_age(self):
+        print(self.age)
+    
+    def print_height_cm(self):
+        print(self.height_cm)
+    
+    def height_ftin(self):
+        inches = self.height_cm/2.54
+        feet = inches//12
+        inches = inches%12
+        return feet,inches
+
+adam = Person('Adam Levine',38,190)
+adam.print_name()
+adam.print_age()
+adam.print_height_cm()
+
+feet,inches = adam.height_ftin()
+print('Height is ',feet,' ft and ',
+      "{:.1f}".format(inches),' in')
+\end{lstlisting}
+
+Like a function, a class is defined by prefixing it with a keyword \code{class} followed by the name of the class and colon. All indented lines after the colon represent the member variables and functions of that class. Within the class, member variables like \code{gender} and member functions can be defined. A class definition usually contains a special function \code{\_\_init\_\_()}, which is called a \textbf{constructor}. A constructor, as the name suggests, can be used to create an object of a class by creating variables and setting their values (unlike other object-oriented languages, a Python class can have only one constructor). Note that any member function, including a constructor, is defined just like any other Python function, with appropriate indentation for lines associated with that function. However, unlike ordinary Python functions, member functions of a class \textbf{must} be passed a \code{self} argument at the very beginning, as this is necessary for the function to be associated with the object.
+
+In the \code{Person} class above, the constructor has four arguments: \code{self, name, age, height\_cm}. The last three are self-explanatory, while \code{self} is a reference to the class itself (or strictly speaking, the object, similar to a \code{this} pointer in C++). The \code{self} argument is usually provided to all functions in a class so that they can access the variables in the associated object using the dot (.) operator. Consider the constructor above: it takes the value of the \code{name} variable passed to it and stores it in a \textbf{local} variable, also called \code{name} (it could've been called something else too). It knows that this is a local variable because it is defined using \code{self.name}, which implies that it is a member of the object itself. Thus, the dot operator is used to access member variables and functions. A similar operation is performed for the other member variables, \code{age, height\_cm}. Then, four more member functions are defined, which are also self-explanatory. Remember, all members functions must be passed a \code{self} argument in addition to any other optional arguments, \textit{even if it never uses any local variables}. Similar to regular Python functions, member functions can also return values, like the \code{height\_ftin()} function defined above.
+
+Now that we've defined the class, we can create an object, which is an instance of the class. This means that the object is a specific implementation of a class. In the code above, this is defined similar to how a new variable is defined. An object called \code{adam} is created and the \code{Person} class is assigned to it. In this assignment, the constructor of the \code{Person} class is called, which needs the \code{name, age, height\_cm} variables, which are thus provided. Below that, members functions are used to print the objects's name, age, and height in cm, and to obtain the height in feet and inches. These member functions are accessed using the dot operator on the object, similar to how we used the dot operator on \code{self} to access members in the definition of the class.
+
+\subsection{Inheritance}
+Classes can seem unwieldy at first, but they are actually very useful in writing well-organized and efficient code. One of the most useful features of classes is called inheritance: the ability of a class to inherit all the members of a parent or \textit{base} class while adding more to itself. This allows for a more granular level of abstraction. Let's see this with a concrete example: consider a student. A student is also a person (and thus has all the features of a person), but they have more features unique to them: GPA and level of study. We can define a class \code{Student} that inherits all the members of the \code{Parent} class, but also has these extra members:
+
+\begin{lstlisting}[frame=single] 
+class Student(Person):
+    def __init__(self,name,age,height_cm,GPA,level):
+        Person.__init__(self,name,age,height_cm)
+        self.GPA = GPA
+        self.level = level
+    
+    def print_name(self,status='regular'):
+        print(self.name,' STUDENT: ',status)
+    
+    def print_GPA(self):
+        print(self.GPA)
+    
+    def print_level(self):
+        print(self.level)
+
+nicole = Student('Nicole Kidman',19,170,3.6,'freshman')
+
+nicole.print_name('in absentia')
+nicole.print_age()
+nicole.print_height_cm()
+nicole.print_GPA()
+nicole.print_level()
+
+feet,inches = nicole.height_ftin()
+print('Height is ',feet,' ft and ',
+      "{:.1f}".format(inches),' in')
+\end{lstlisting}
+
+Once again, a class \code{Student} is defined with the \code{class} keyword, but this time, the class is also passed the \code{Person} class so that it inherits from it. The inherited class has all the members of the base class, and can change them if necessary. The constructor is defined as usual, with the necessary variables passed to it and stored in local member variables. However, within the constructor, variables that were inherited from the base class can be initialized using the constructor of the base class, which can be accessed with the dot operator. This avoids having to rewrite lines of code that were already written for the base class' constructor, with code being written only for the variables unique to the child class.
+
+After the constructor, the \code{Student} class has access to all the member functions of its base class, and thus, they do not have to be rewritten. Three new member functions are created: \code{print\_GPA()} and \code{print\_level()}, which are self-explanatory, and a new \code{print\_name()} that overwrites the function of the same name in the base class by appending the name of the person with the word STUDENT, and accepting a new argument \code{status} with a specified default value. 
+
+Thus, the child class not only has access to the members functions of the base class, but can \textit{also} change them by changing the implementation of the function and also the number of arguments. This ability of functions with the same name to do different things in different situations is called \textbf{polymorphism}. Indeed, it would've also been possible to define the \code{print\_name()} function in the base \code{Person} class \textit{without any implementation at all}, and then allow all child classes to have their own specific implementations of it. Such a class, which only has the name of a function but no implementation, is called an \textbf{Abstract Base Class (ABC)}. Polymorphism and ABCs form the basis of modern object-oriented programming.
+
+The definition  of the child class is followed by defining an object in the main program, and then all its member functions are called. Try to do this yourself to see the result.
+
+\newpage
+\section{Challenge: Basic Python}
+
 
 \end{document}
