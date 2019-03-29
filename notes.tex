@@ -587,9 +587,114 @@ The definition  of the child class is followed by defining an object in the main
 
 \newpage
 \section{Challenge: Basic Python}
-That's all you needed to know about Python! Well, that's all the theory anyway. Like a human language, programming languages cannot be learned by listening to someone in a classroom or reading a book. They can only be learned through practice, and Python is no different. You can find a good list of practice exercises \href{https://www.practicepython.org/}{here}. In this section though, we'll solve one problem using all the tools we've learned so far.
+That's all you needed to know about Python! Well, that's all the theory anyway. Like a human language, programming languages cannot be learned by listening to someone in a classroom or reading a book. They can only be learned through practice, and Python is no different. You can find a good list of practice exercises \href{https://www.practicepython.org/}{here}. In this section though, we'll solve one problem using all the tools we've learned so far (except classes since they're a bit more advanced, but you should practice that yourself).
 
 \subsection{Problem Statement}
+Using Python, define a function \code{prime\_check()} that takes in an integer, and prints "This is a prime number" if it is a prime number, and "This is not a prime number" otherwise. The algorithm is as follows:
+
+\begin{enumerate}
+	\item Negative integers and zero are invalid inputs
+	\item If the number is 1 or 2, it's a prime number
+	\item For other numbers, divide it sequentially by each number between 2 and \textit{half} the number
+	\item If, during the above process, the remainder is ever zero, it is not a prime number, otherwise it is
+\end{enumerate}
+
+Remember to use integer or floor division. Good luck! Remember, there are many possible solutions. You can see two of my solutions below (but try it yourself first).
+
+\subsection{A Simple Solution}
+This is a simple solution that I came up with:
+
+\begin{lstlisting}[frame=single] 
+def prime_check(x):
+    '''
+    Prints a message indicating if x is a prime number
+    or not
+    If x is invalid (negative integer or zero), 
+    prints a message
+    x is of type int
+    '''
+    if x<=0:
+        print("Invalid")
+    elif x==1 or x==2:
+        print("This is a prime number")
+    else:
+        if is_prime(x):
+            print("This is a prime number")
+        else:
+            print("This is not a prime number")
+
+def is_prime(x):
+    '''
+    Checks if a valid input x is a prime number
+    Returns True is x is prime
+    Returns False is x is not prime
+    x is of type int
+    '''
+    prime = True
+    
+    for y in range(2,(x//2)+1):
+        if x%y == 0:
+            prime = False
+            break
+    
+    return prime
+
+prime_check(1373)
+\end{lstlisting}
+
+I defined two functions. My first function is the code{prime\_check()} function that the problem requires. It first checks for an invalid number or if the number is 1 or 2. Then, it calls another function \code{is\_prime()}, which returns a boolean value \code{True} if the number is prime and \code{False} otherwise. Accordingly, it prints the appropriate message. That's it - the actual work of checking if a valid number is prime or not is in the \code{is\_prime()}. Breaking up a code like this called refactoring, and it is good practice as it makes the code readable and easy to modify. Also note the explanatory statements at the beginning of the function, contained between three ' characters. This is called a docstring, and provides information about the function and is another piece of good programming practice.
+
+Now consider the code{is\_prime()} function itself. It starts out by defining a boolean variable \code{prime} to be \code{True}. Following the algorithm, it creates a range of numbers from 2 to half the input number (note that it uses floor division \code{//2} to ensure that we get an integer for odd numbers). The '\code{+1}' in the second argument of the \code{range()} function is because the range is exclusive of the second argument (see \href{https://docs.python.org/3/library/functions.html#func-range}{documentation}). Then, the function iterates over each value in that range, checking to see if the remainder with the input number is ever zero. If it is, then \code{prime} is set to \code{False} and the loop is broken, because there is no need to perform any more checks (the code will work without that, but will take longer). If the number really is prime, the \code{if} condition is never true and \code{prime} stays \code{True}. Finally, \code{prime} is returned.
+
+I tried this code with the number 1373, which is big enough that I can't say immediately whether it is prime or not. Is it?
+
+\subsection{A Complicated Solution}
+Here is a more complicated - and much shorter - solution that I came up with, which truly illustrates how powerful yet simple Python is:
+
+\begin{lstlisting}[frame=single] 
+def prime_check(x):
+    '''
+    Prints a message indicating if x is a prime number
+     or not
+    If x is invalid (negative integer or zero), 
+    prints a message
+    x is of type int
+    '''
+    if x<=0:
+        print("Invalid")
+    elif x==1 or x==2:
+        print("This is a prime number")
+    else:
+        if is_prime(x):
+            print("This is a prime number")
+        else:
+            print("This is not a prime number")
+
+def is_prime(x):
+    '''
+    Checks if a valid input x is a prime number
+    Evaluates in one line
+    Returns True is x is prime
+    Returns False is x is not prime
+    x is of type int 
+    '''
+    return not bool(len([i for i 
+    	in range(2,(x//2)+1) if x%i==0]))
+
+prime_check(1373)
+\end{lstlisting}
+
+This code seems... abrupt. So let's break it down. This has the same overall structure as the last one: the \code{prime\_check()} function only prints the message, while the much-shorter \code{is\_prime()} function implements the algorithm to check if the number is prime or not. It may not seem obvious at first, but it really is the same algorithm written in just one line of code. How does it do that?
+
+First, the function creates a list using an iterator over a variable \code{i}, which iterates numbers between 2 and half the input number, just as in the \code{for} loop before. But then, at the end of that loop, an additional condition is added using an in-line \code{if} statement: the loop returns a value to \code{i} only if its remainder with the input number is zero. We know from the algorithm that if the remainder is ever zero, then it's not a prime number. So now, we've built a list of every instance when that remainder was zero for the given number, and we know that the length of this list must be zero for a prime number, and non-zero (actually 1 if you think about it) otherwise. So we find the length of this list by plugging it into the \code{len()} function.
+
+Finally, we use Python's \code{bool()} function (see \href{https://docs.python.org/3/library/functions.html#bool}{documentation}) to convert that length into a \code{True} or \code{False} value. The \code{bool()} function returns \code{False} if the input is 0 and \code{True} otherwise (see \href{https://docs.python.org/3/library/stdtypes.html#truth}{truth testing} in Python). But if the length is 0, we need this to return \code{True} as that means it's a prime number and \code{False} if it's not - so we need to reverse the result of the \code{bool()} function. We do this by sticking a \code{not} operator in front of it. And just like that, we have a statement that tells us if the number is prime or not - and we just return whatever value it gives. 
+
+Python beautifully let us create a list with a loop \textit{and} an \code{if} statement in just one line! This made the code much shorter and (with practice) easier to read. That's the beauty of Python - it lets you get stuff done without having to write a lot of code.
+
+\newpage
+\section{Python Libraries}
+\subsection{Why Libraries?}
 
 
 \end{document}
