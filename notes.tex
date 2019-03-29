@@ -886,6 +886,140 @@ This example was simple but useful to illustrate how numpy can be used to write 
 
 \newpage
 \section{Matplotlib}
-They say that a picture is worth a thousand words, and this rings as true for scientific computing as it does for anything else. 
+They say that a picture is worth a thousand words, and this rings as true for scientific computing as it does for anything else. There are several packages - either standalone or wrapped together with some other application - to quickly create publication-quality visualizations of their scientific data. Python also has several libraries, of which matplotlib is quite popular. Specifically, matplotlib's pyplot library contains Python functions that can interact with matplotlib to generate scientific plots. 
+
+\subsection{Plotting 1D Data}
+The most basic type of data you can get is 1D data. The most basic way of plotting such data is using a bar chart. Consider the example below:
+
+\begin{lstlisting}[frame=single] 
+%matplotlib inline
+import numpy as np
+from matplotlib import pyplot as plt
+
+barnumber = np.arange(4)+1
+barheight= np.random.uniform(5.0,10.0,(4,))
+
+plt.bar(barnumber,barheight)
+plt.xlabel('Bar Number')
+plt.ylabel('Bar Height')
+plt.title('Random Bar Heights')
+plt.ylim([0,10])
+plt.xticks(barnumber)
+plt.show()
+\end{lstlisting}
+
+Note that the \code{\%matplotlib inline} command in the beginning is to that figures are shown in-line in Jupyter Notebooks. It is not necessary if you're using a script. The next two lines import numpy and pyplot and assign the somewhat standard aliases to them - this only needs to be done once for each script. Numpy arrays are used to pass data to pyplot. Then, some data is generated - four labels are generated using numpy's \code{arange()} function and stored in the \code{barnumber} variable. Four random numbers between 5 and 10 are generated using numpy's \code{random.uniform()} function and stored in \code{barheight}. We're now ready the plot the height of each bar.
+
+Barplots are generated using pyplot's \code{bar()} function (see \href{https://matplotlib.org/api/_as_gen/matplotlib.pyplot.bar.html}{documentation}). This function takes at least two arguments: the coordinates of the bars and the height of each bar. A number of optional parameters to define things like color, width, error bars, etc. are also available. However, the function on its own just generates a plot without any labels - not exactly publication quality yet. We can add labels to the axes using the \code{xlabel(), ylabel()} member functions of pyplot, and a title with the \code{title()} function. Since these are member functions, they are accessed through the dot operator. \textbf{Pro-tip:} the axis labels and title functions accept \LaTeX inputs.
+
+There are two more problems with this graph. On the x-axis, we would like to show only the bar number as a categorical value, instead of as a coordinate, since this is 1D data. We can do this by setting \code{xticks()} to the bar number. The y-axis scales automatically to the range of the heights, which is between 5 and 10. However, it's usually good practice to start the y-axis from zero instead. We can adjust this by setting the \code{ylin()} function to the appropriate range. Finally, we use the \code{show()} function to show the graph. And viola! In a few simple lines, we have a professional graph. If you've used MATLAB before, all the commands will seem very familiar, with just the extra \code{plt.} prefix. Play around with other options from the documentation to make your graph even better. 
+
+\subsection{Plotting 2D Data}
+Arguably the most common type of plot involves plotting the value of a dependent variable as a function of an independent one. This could be experimental data or data obtained from an analytic function. For example, let's say we want to plot the function $f(x) = (\sin(x)+\cos(x))/2$ in the range $[0^o,360^o]$. Here's the code to do that:
+
+\begin{lstlisting}[frame=single] 
+x = np.linspace(0,360,1000)
+y = (np.sin(x*np.pi/180.) + np.cos(x*np.pi/180.))/2.0
+plt.plot(x,y)
+plt.grid()
+plt.xlabel('x (degrees)')
+plt.ylabel('f(x)')
+plt.show()
+\end{lstlisting}
+
+First, we use numpy's \code{linspace()} function to get 1000 uniformly-spaced points in the required range of $x$. Then, we use numpy's \code{sin(), cos()} functions to define the function and store it in \code{y}. Note that numpy's trigonometric functions expect an input in radians, so we multiplies \code{x} with $\pi/180$ for conversion (using numpy's \code{pi} variable). Finally, we plot the data using pyplot's \code{plot()} function, which takes the independent variable as the first argument and the dependent variable as the second, with several optional variables available (see \href{https://matplotlib.org/api/_as_gen/matplotlib.pyplot.plot.html}{documentation}). Once again, I added axis labels for clarity. I also used the \code{grid()} function to show a grid, which makes it easier to read the graph. 
+
+Multiple data can also be plotted on the same graph, with a legend to differentiate between them. Suppose we want to plot $f(x)=e^{-x}$ and $f(x)=e^{-2x}$ on the same semi-logarithmic graph for $x \in [0,2]$. Here's the code to do that:
+
+\begin{lstlisting}[frame=single] 
+x = np.linspace(0.,2.,1000)
+y1 = np.exp(-x)
+y2 = np.exp(-2.0*x)
+
+plt.semilogy(x,y1,label='$e^{-x}$')
+plt.semilogy(x,y2,label='$e^{-2x}$')
+plt.xlabel('x')
+plt.ylabel('f(x)')
+plt.legend()
+plt.grid(which='both')
+plt.show()
+\end{lstlisting}
+
+The first three lines define the independent and dependent variables as usual. Then, a semi-logarithmic (y-axis logarithmic) graph is plotted with the \code{semilogy()} function for the first function, with a label provided. The expression in the label (which uses \LaTeX here!) will be used in the legend. On the next line, another \code{semilogy()} function is used for the second function. Pyplot knows that these are meant to be used in the same graph, and will take care of it. Labels and grids are provided as usual, and the \code{legend()} function is used to display the legend. Run the code above and have a look at the results.
+
+Finally, let's look at a case where we have different types data stored in a file. In your data folder, I have created a Comma-Separated Values (CSV) file weather.csv, which contains the hourly forecast temperature (in $^o$F) and probability of precipitation (in \%) for some location. Open the file and have a look. The first row contains headers, which we don't need for plotting. Because the two data series have different units, we'd like to plot them on separate subplots of the same plot. Here's the code that will do that:
+
+\begin{lstlisting}[frame=single] 
+hour,temperature,precip_prob = 
+	np.loadtxt('../data/weather.csv', dtype=np.float,
+	delimiter=',',skiprows=1,unpack=True)
+
+plt.subplot(1,2,1)
+plt.plot(hour,temperature)
+plt.xlabel('Hour')
+plt.ylabel('Temperature ($^o$F)')
+plt.title('Temperature')
+
+plt.subplot(1,2,2)
+plt.bar(hour,precip_prob)
+plt.xlabel('Hour')
+plt.ylabel('Probability (%)')
+plt.title('Probability of Precipitation')
+plt.show()
+\end{lstlisting}
+
+The data is loaded using numpy's \code{loadtxt()} function (see \href{https://docs.scipy.org/doc/numpy/reference/generated/numpy.loadtxt.html}{documentation}). The first argument to this function is the path to the CSV file, while the second argument specifies the data type. The \code{delimiter} argument is used to specify a delimiter, since it could be any character (it's a comma in a CSV file). The next argument is used to skip a certain \textit{number} of rows from the top - in this case, we want to skip the first row because it's a header, so we set this to 1. Finally, we set \code{unpack} to \code{True} because we want to extract hour, temperature and probability of precipitation as three separate numpy arrays, or in other words we want to unpack the data.
+
+We want two subplots to plot each of the data series, so we use pyplot's \code{subplot()} function to create them. The first argument is the number of rows and the second argument is the number of columns - we want to plot it as one row with two columns. The third argument is used to plot a specific subplot, whose numbering starts from 1 from the top-left and continues from left to right along a row for each row. Thus, 1 represents the first subplot and 2 the second. Once we access the first subplot, we plot the temperature as usual. We then access the second subplot and plot the probability data, and we finally use the \code{show()} function to show the entire plot. Try this yourself to see the results.
+
+\subsection{Plotting 3D Data}
+Finally, we look at plotting 3D data. The most common application of this is for plotting values of field functions. There are usually two ways of presenting 3D data: 
+
+\begin{itemize}
+	\item As an actual 3D graph, shown using an isometric drawing. This is great for showing data through an interactive graph on a browser, but may not be easy to interpret when printed on paper.
+	\item A 2D graph with a third "axis" in the form of contours or colorbars (or both). This is the more traditional approach and is easy to interpret.
+\end{itemize}
+
+Let's first plot a graph of the first type. Let's say we want to plot $f(x,y)=\sin(\sqrt{x^2+y^2})$ in the region $[-6,6] \times [-6,6]$. Plotting this is much like plotting a 2D function, in that we have a pyplot function which takes in the independent and dependent variables. However, there is one key difference: the independent variables are no longer defined on the 1D axes, but in a 2D mesh, and the dependent variable must then be defined on that mesh. Thus, as a first step, we need to define a 2D mesh from the underlying 1D points from each axis. The full code is shown below:
+
+\begin{lstlisting}[frame=single] 
+from mpl_toolkits import mplot3d
+
+x = np.linspace(-6,6,100)
+y = np.linspace(-6,6,100)
+
+X,Y = np.meshgrid(x,y)
+Z = np.sin(np.sqrt(X**2+Y**2))
+
+fig = plt.figure()
+ax = plt.axes(projection='3d')
+
+ax.contour3D(X, Y, Z, 50, cmap='spring')
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.set_zlabel('f(x,y)')
+plt.show()
+\end{lstlisting}
+
+The first thing to notice is that we imported a new library, \code{mplot3d}. This is because Pyplot does not provide native support for 3D graphs, but MPlot3D provides the necessary extensions for it to. In the next two lines, 100 points along each axis are sampled. These are 1D points on each axis, which have to be meshed together. This is done using numpy's \code{meshgrid} command, which returns the 2D meshed coordinates \code{X, Y} of all the points in he domain (there will be $100 \times 100$ points). Since \code{X,Y} are 2D matrices, when the function is evaluated with them, it will also return a 2D matrix, with one value for each point on the mesh.
+
+The last step is to plot the mesh. Because MPlot3D needs to work with Pyplot, this is a little more involved. First, we create a blank figure \code{fig}. Any plot can be put in this figure. We create a blank 3D plot \code{ax}, which will go into the figure. Finally, the mesh is plotted using the \code{contour3D()} function, which takes in the independent and dependent variables, the number of contours to plot (50), and a colormap to use (see \href{https://matplotlib.org/tutorials/colors/colormaps.html}{here} for a list of available colormaps). Since this graph has a z-axis to directly read off the values, the colormap is optional.
+
+This is good, but a 3D plot can 'hide' a lot of data points 'behind' some features. A contour plot avoids that pitfall. For the same data as above, a contour plot can be created using the code below, which is very similar to the full 3D plot's code:
+
+\begin{lstlisting}[frame=single] 
+plt.contourf(X,Y,Z,50,cmap='spring')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.colorbar(label='f(x,y)')
+plt.show()
+\end{lstlisting}
+
+The \code{colorbar()} function adds a colorbar to the plot, and the \code{label} argument to it adds a colorbar title so you can show what the colors represent. Unlike the full 3D plot, a colorbar is necessary here for the reader to interpret the graph.
+
+Matplotlib has many more options for 1D, 2D, and 3D plots than described here. However, they all follow the same general procedure to create the plot. Try these examples, and the try it on your own data. When in doubt, always go back to the documentation for whatever plot you're making.
+
+\newpage
+\section{Scipy}
 
 \end{document}
