@@ -16,11 +16,11 @@
 \cfoot{\thepage\ of \pageref{LastPage}}
 
 \usepackage{hyperref}
-\usepackage[
-    type={CC},
-    modifier={by-nc-sa},
-    version={3.0},
-]{doclicense}
+%\usepackage[
+ %   type={CC},
+  %  modifier={by-nc-sa},
+   % version={3.0},
+%]{doclicense}
 
 \begin{document}
 
@@ -67,7 +67,7 @@
 
 Copyright \copyright\ 2019, Sushobhan Sen
 
-\doclicenseThis
+%\doclicenseThis
 \newpage
 
 \tableofcontents
@@ -695,6 +695,77 @@ Python beautifully let us create a list with a loop \textit{and} an \code{if} st
 \newpage
 \section{Python Libraries}
 \subsection{Why Libraries?}
+Python is great and can do a lot of things. But it would probably have remained an also-ran language, if not for two things: it's open-source code, which allows anybody in the world to shape and improve the language; and the wide variety of libraries that those very users have developed to extend the use of Python to just about every major application. Some Python libraries - like numpy and matplotlib - are so ubiquitious that many developers consider them to be an indispensible part of Python itself.
 
+However, this decentralized approach to extending the capabilities of the language does come with some downsides. For one, there are so many libraries that it's impossible to learn all of then, and incredibly hard to figure out which one is best-suited for your application (except some libraries - like numpy - that have near-universal approval). Also, not all libraries are good: some of them are out of development and do not work properly, while others are slow in development. In addition, many libraries have scant documentation, which make them very difficult to use. And some have such voluminous documentation as to scare away new users! The bottom line is that while Python libraries are an indispensible tool and a victory of open-source programming, they can feel like absolute anarchy to use. 
+
+\subsection{Some Libraries}
+There are so many Python libraries that it's impossible to teach all of them. It's also unnecessary - just a small number of libraries can take care of most of your needs. In the table below, I present a list of some popular libraries and their application areas. By no means is this list exhaustive, but all the libraries listed are, in general, very good. Note that these applications are the most popular ones - many of these libraries have applications that span several areas. Several of these libraries - especially numpy and matplotlib - are actually used by other libraries too.
+
+\begin{tabular}{|p{2in}|p{3in}|}
+\hline
+\textbf{Libraries} & \textbf{Popular Applications} \\ \hline
+numpy, scipy & Numerical and scientific analysis (comparable to MATLAB) \\ \hline
+matplotlib, seaborn, vtk & Scientific visualization \\ \hline
+pandas & Data science \\ \hline
+scikit-learn, tensorflow, pytorch & Machine learning and deep learning \\ \hline
+scrapy, requests, selenium, PyPDF2 & Data mining \\ \hline
+geopandas, rasterio, rasterstats, descartes, pySAL, arcpy & Geospatial data analysis and GIS \\ \hline
+wxPython, tkinter, pyQt, pyGUI & Graphical User Interface (GUI) development \\ \hline
+SQLAlchemy, postgreSQL & Database management \\ \hline
+django, TurboGears, flask, web2py & Web development \\ \hline
+OpenCV, scikit-image & Image and signal processing \\ \hline
+MetPy, netCDF4, SatPy & Meteorology \\ \hline
+mpi4py, cython, jython & High performance computing \\ \hline
+biopython & Biology \\ \hline
+astropy & Astronomy \\ \hline
+scikit-chem & Chemistry \\ \hline
+SymPy & Symbolic math (comparable to Mathematica) \\ \hline
+FiPy, OpenSeenPy & Finite element analysis \\ \hline
+fluidity, fluidsim, fluiddyn, cfdpython & Computational fluid dynamics \\ \hline
+Py2B, pySerial, instrumentino & Arduoino programming and IoT \\ \hline
+pyfin, QuantPy, pynance, analyzer, pyfolio & Finance and trading \\ \hline
+nltk, spacy, polyglot & Natural language processing \\ \hline
+pygame, arcade, cocos2d, PyODE & Game development and animation \\ \hline
+\end{tabular}
+
+In addition to these libraries, Python itself has several modules (which are like libraries, but distributed with Python itself) that helps extend its applications. See \href{https://docs.python.org/3/py-modindex.html}{documentation} for an exhaustive list. Libraries and modules are used very similarly, so I may use them interchangeably.
+
+\subsection{Using Libraries}
+Almost all libraries follow the same syntax as Python itself, so using them is as simple as knowing what functions they have and how to call them. However, libraries are not included in Python by default (for good reason - there are too many of them!). To use a library, you have to follow two steps. 
+
+First, make sure the library is installed on your computer. If you're using Anaconda, many popular libraries come pre-installed. However, on a terminal, you may have to install any libraries that you need, together with any dependencies. See the library's documentation to install it.
+
+Second, once the library is installed, it has to be imported into the Python script. This can be done easily using the \code{import} command followed by the name of the library. Libraries can be imported at any point in the script (but before they have to be used, of course), but are usually imported at the very beginning, for clarity. In addition, since libraries tend to have long names (which, as we'll see, need to be typed every time), they are usually aliased using an \code{as} statement right after being imported. For example, this is how the numpy library is usually imported:
+
+\begin{lstlisting}[frame=single] 
+import numpy as np
+\end{lstlisting}
+
+The alias could be anything, but since numpy is so commonly-used, it has become an unofficial standard of sorts to use the np alias for it. Now, whenever we use a numpy function in this script, we have to prefix it with np followed by a dot (.) operator and then the name of the function, for example a sine function in numpy can be called using:
+
+\begin{lstlisting}[frame=single] 
+np.sin(0)
+\end{lstlisting}
+
+Now, numpy has a lot of useful functions, but there are many libraries from which we might be interested in only a subset of functions, or only a single function. We can selectively import functions using a \code{from} statement, which is good practice to speed up execution. For example, matplotlib contains a sub-library of functions under pyplot for MATLAB-like plotting in Python, which is usually imported as follows:
+
+\begin{lstlisting}[frame=single] 
+from matplotlib import pyplot as plt
+\end{lstlisting}
+
+Or as follows:
+
+\begin{lstlisting}[frame=single] 
+import matplotlib.pyplot as plt
+\end{lstlisting}
+
+Here again, the alias can be anything, but since pyplot is so commonly used, plt has become somewhat of a standard for it. In the following chapters, we'll go through four of the most popular Python libraries - numpy, pandas, scipy, and matplotlib - with some examples to see how to use them for a variety of applications.
+
+\newpage
+\section{Numpy}
+Numpy is a Python library for fast matrix manipulation. By fast, I mean that the library is optimized for vectorizing data and implements the popular and efficient linear algebra package, BLAS. In fact, numpy is actually a Python wrapper - if you look inside its functions, you'll see a lot of pre-compiled C and FORTRAN code. This is what makes it much faster than regular Python, but its synatx is a lot easier than those compiled languages.
+
+In the following example, we'll see how to use numpy for some popular applications. They key point to remember is that numpy is for matrix manipulation - so don't think about manipulating individual elements of a matrix (say in a loop), but about manipulating all elements simultaneously. 
 
 \end{document}
