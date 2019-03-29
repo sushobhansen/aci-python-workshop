@@ -16,11 +16,11 @@
 \cfoot{\thepage\ of \pageref{LastPage}}
 
 \usepackage{hyperref}
-%\usepackage[
- %   type={CC},
-  %  modifier={by-nc-sa},
-   % version={3.0},
-%]{doclicense}
+\usepackage[
+    type={CC},
+    modifier={by-nc-sa},
+    version={3.0},
+]{doclicense}
 
 \begin{document}
 
@@ -67,7 +67,7 @@
 
 Copyright \copyright\ 2019, Sushobhan Sen
 
-%\doclicenseThis
+\doclicenseThis
 \newpage
 
 \tableofcontents
@@ -695,7 +695,7 @@ Python beautifully let us create a list with a loop \textit{and} an \code{if} st
 \newpage
 \section{Python Libraries}
 \subsection{Why Libraries?}
-Python is great and can do a lot of things. But it would probably have remained an also-ran language, if not for two things: it's open-source code, which allows anybody in the world to shape and improve the language; and the wide variety of libraries that those very users have developed to extend the use of Python to just about every major application. Some Python libraries - like numpy and matplotlib - are so ubiquitious that many developers consider them to be an indispensible part of Python itself.
+Python is great and can do a lot of things. But it would probably have remained an also-ran language, if not for two things: it's open-source code, which allows anybody in the world to shape and improve the language; and the wide variety of libraries that those very users have developed to extend the use of Python to just about every major application. Some Python libraries - like numpy and matplotlib - are so ubiquitous that many developers consider them to be an indispensable part of Python itself.
 
 However, this decentralized approach to extending the capabilities of the language does come with some downsides. For one, there are so many libraries that it's impossible to learn all of then, and incredibly hard to figure out which one is best-suited for your application (except some libraries - like numpy - that have near-universal approval). Also, not all libraries are good: some of them are out of development and do not work properly, while others are slow in development. In addition, many libraries have scant documentation, which make them very difficult to use. And some have such voluminous documentation as to scare away new users! The bottom line is that while Python libraries are an indispensible tool and a victory of open-source programming, they can feel like absolute anarchy to use. 
 
@@ -764,8 +764,128 @@ Here again, the alias can be anything, but since pyplot is so commonly used, plt
 
 \newpage
 \section{Numpy}
-Numpy is a Python library for fast matrix manipulation. By fast, I mean that the library is optimized for vectorizing data and implements the popular and efficient linear algebra package, BLAS. In fact, numpy is actually a Python wrapper - if you look inside its functions, you'll see a lot of pre-compiled C and FORTRAN code. This is what makes it much faster than regular Python, but its synatx is a lot easier than those compiled languages.
+Numpy is a Python library for fast matrix manipulation. By fast, I mean that the library is optimized for vectorizing data and implements the popular and efficient linear algebra package, BLAS. In fact, numpy is actually a Python wrapper - if you look inside its functions, you'll see a lot of pre-compiled C and FORTRAN code. This is what makes it much faster than regular Python, but its syntax is a lot easier than those compiled languages.
 
 In the following example, we'll see how to use numpy for some popular applications. They key point to remember is that numpy is for matrix manipulation - so don't think about manipulating individual elements of a matrix (say in a loop), but about manipulating all elements simultaneously. 
+
+\subsection{Numpy Arrays}
+The backbone of numpy is numpy arrays, a data type that numpy uses to define matrices containing data of the same type. Numpy arrays look similar to Python lists (or a list of lists for multidimensional arrays), but they store data in contiguous memory blocks for fast manipulation. A numpy array is created using the \code{array()} member function of numpy - since it's a member function, we need to dot operator to call it:
+
+\begin{lstlisting}[frame=single] 
+import numpy as np
+a = np.array([[1,2,3],[4,5,6],[7,8,9]])
+print(a)
+print(type(a))
+print(a.shape)
+\end{lstlisting} 
+
+Let's unpack this (pun intended!). The first line imports numpy and gives it the alias np - you only have to do this once in a script. The next line defines a numpy array \code{a} by calling the \code{array()} member function and passing a list of lists. Each list inside this list defines a row on the matrix. The shape property of this array returns a tuple of the number of rows and the number of columns in the array. Try this code to see how it works.
+
+Numpy also has some useful built-in functions to quickly define an array with some specific properties:
+
+\begin{lstlisting}[frame=single] 
+b = np.zeros((4,4),dtype=np.float)
+print(b)
+c = np.ones((4,3),dtype=np.int)
+print(c)
+d = np.eye(3,dtype=np.float)
+print(d)
+e = np.reshape(np.arange(10),(2,5))
+print(e)
+\end{lstlisting}
+
+The \code{zeros()} method defines an array of zeros, with the \code{dtype} attribute used to specify whether those zeros are integers, floats, or complex numbers. Similarly, \code{ones} defines an array of ones, and \code{eye} defines an identity matrix. Numpy can also take a matrix and reshape it into a different matrix. The \code{arange()} member function is similar to the \code{range()} function in Python, except that it returns a numpy array. The \code{reshape()} function then takes this array and reshapes it based on the dimensions provided in the tuple in the second argument - of course, the user has to ensure that the total number of elements remains the same.
+
+\subsection{Array Manipulation}
+The true power of numpy is its ability to manipulate arrays fast. Typically, we want to manipulate all the members of an array at one time, and not individual members. Nonetheless, it is possible to extract a smaller part of an array using the slicing operator \code{[:]}. In the following example, an array consisting of ten members in one row and ten columns (arrays with either one row or one column are called vectors) is sliced to extract the third through sixth members as another array:
+
+\begin{lstlisting}[frame=single] 
+x = np.arange(10)
+print(x)
+x1 = x[2:6]
+print(x1)
+\end{lstlisting}
+
+Note that numpy arrays, like Python lists, are indexed from zero, so the index of the third item is 2 and that of the sixth item is 5. Indexing is also exclusive of the second number, so to get the sixth item, we need to slice to index 6. Leaving the second number blank represents the last index, and leaving the first number blank represents the first index. Try it yourself to see. For multidimensional arrays, slicing in each dimension is separate by a comma, for example \code{[1:3,3:]} for a 2D array.
+
+Numpy arrays can manipulate their elements simultaneously by bringing all (or large chunks of) array values into memory at once, as opposed to Python's approach of handling them one by one. This approach to speeding up computation is called \textbf{vectorization}, and together with algorithm complexity, forms the foundation of modern scientific computing. Consider this short piece of code:
+
+\begin{lstlisting}[frame=single] 
+a = np.array([12,13,14])
+print(a+3)
+print(a.mean(),a.sum())
+\end{lstlisting}
+
+Here, a numpy array was initialized and a scalar was added to it. From a purely mathematical perspective, this makes no sense, and indeed with a Python list, this operation would throw an error. But numpy knows what you mean: you want to add a scalar to all the elements of the vector simultaneously, and it does just that. This is called \textbf{broadcasting}, works for all other operators too. In fact, broadcasting works between arrays too, not just between an array and a scalar. In addition, every numpy array includes a number of member functions that can quickly manipulate all the elements as well, such as the \code{mean()} and \code{sum()} functions shown above.
+
+But numpy goes one step further: it defines hundreds of \textit{vectorized functions} too, which can apply the function to all elements in the array fast, and return another array of the result. For example, consider this short program:
+
+\begin{lstlisting}[frame=single] 
+a = np.arange(5)**3
+print(np.sqrt(a))
+\end{lstlisting}
+
+An array of five numbers is defined, and each member is cubed as before. In the second line, the \code{sqrt()} member function of numpy is used to calculate the square root of each member and return an array of the results. Thus, there is no need to manipulate each element - all elements can be manipulated simultaneously. 
+
+Another useful feature of numpy arrays is masking, which allows Boolean operations to be vectorized. A masked array is an array of Boolean values (\code{True} or \code{False}). When this is passed to another array of the same dimensions, it returns a 1D array of those values corresponding to \code{True}. As an example, consider the following code:
+
+\begin{lstlisting}[frame=single] 
+a = np.random.rand(10).reshape((2,5))
+b = np.logical_and((a>0.1),(a<0.5))
+print(b)
+print(a[b])
+\end{lstlisting}
+
+An array \code{a} is defined with 10 random numbers between 0 and 1, using the \code{random.rand()} numpy function, and reshaped into a $2\times5$ matrix. We want to extract those values of \code{a} that are between 0.1 and 0.5. We use a comparison operator \code{a>0.1} for values greater than 0.1, which returns a Boolean matrix applying the operator to each element of \code{a}. Similarly, a Boolean matrix for values less than 0.5 is created. Since we want values that are true for both cases, we perform a logical element-wise \code{and} operation on these Boolean matrices with the \code{logical\_and()} numpy function, and save it to a matrix \code{b}. This matrix is our masked array - it's an array of Boolean values of the same shape as \code{a}. We pass this masked array to \code{a} and get an array of values that correspond to \code{True}. Thus, without ever writing a loop, we used a vectorized (and hence, fast) approach to solve the problem.
+
+\subsection{Challenge: Linear Algebra}
+Possibly the most important operation in scientific computing is solving a system of linear equations. Almost all numerical methods as well as machine learning algorithms are constrained by how fast they are able to solve the simple equation $Ax=b$, where the unknown vector $x$ can have millions of elements. In this challenge section, we'll see how to use numpy's linear algebra package linalg to analyze and solve a system of linear equations. 
+
+Here are the equations that we will solve:
+
+$$
+\begin{array}{lcl}
+x+y+z&=&6 \\
+2y+5z&=&-4 \\
+2x+5y-z&=&27 \\
+\end{array}
+$$
+
+Or in matrix form:
+
+$$
+\begin{pmatrix}
+1 & 1 & 1 \\
+0 & 2 & 5 \\
+2 & 5 & -1 \\
+\end{pmatrix}
+\begin{pmatrix}
+x \\ y \\ z
+\end{pmatrix}
+=
+\begin{pmatrix}
+6 \\ -4 \\ 27
+\end{pmatrix}
+$$
+
+Which we can write vectorially as $Ax=b$. The challenge is to first check whether a unique solution exists (by checking if the determinant is zero or not) and if so, find it, using numpy functions. Try it yourself before seeing my solution below.
+
+\begin{lstlisting}[frame=single] 
+A = np.array([[1,1,1],[0,2,5],[2,5,-1]])
+b = np.array([6,-4,27])
+if np.linalg.det(A) == 0.0:
+    print("No unique solution exists")
+else:
+    x = np.linalg.solve(A,b)
+    print("Solution is: ",x)
+\end{lstlisting}
+
+The first step is to define the matrices \code{A,b} using numpy's \code{array()} function as before. Then, we check if the determinant of \code{A} is zero using an \code{if} statement, in which case we print a message that there is no unique solution. The determinant is calculated using numpy's \code{linalg.det()} function. If the determinant is non-zero, we solve for \code{x} using numpy's \code{linalg.solve()}, function, which uses a fast algorithm to solve the system (specifically, it uses LAPACK's gesv algorithm, which itself is an efficient implementation of LU decomposition). Finally, we print the solution. Try it yourself. 
+
+This example was simple but useful to illustrate how numpy can be used to write simple scientific programs without having to worry too much about specific implementation while ensuring that the program runs fast. Numpy forms the basis of almost all the major scientific programming libraries in Python, so we'll come across it again in the following chapters.
+
+\newpage
+\section{Matplotlib}
+They say that a picture is worth a thousand words, and this rings as true for scientific computing as it does for anything else. 
 
 \end{document}
