@@ -1187,4 +1187,109 @@ The first line imports the \code{fft()} function, while the second line imports 
 \newpage
 \section{Pandas}
 Data science is a fast-growing field that is spreading its tentacles to virtually every traditional field: from railroads to agriculture to the social sciences, data is the currency of the digital millennium. But while we may have a lot of data, it can quickly become difficult to analyze it with enough confidence to make decisions. That's a gap that data science is trying to fill, and one of the most popular tools in it is the pandas Python library. 
+
+Pandas is built on top of numpy, but with further abstractions that makes it easier to read and analyze data. What's more, pandas is highly interactive, giving the programmer almost instant-feedback - indeed, it feels a lot like Excel in that respect. And perhaps the most useful feature is pandas suite of data-cleaning tools: after all, while there's a lot of data, there's still a shortage of \textit{good} data. In this chapter, we'll use pandas do analyze drives from the 2013 college football season (data courtesy CFB Stats), which can be found in the drive.csv file in the data folder.
+
+\subsection{Series and DataFrames}
+Pandas defines two important data types: series and dataframes. A pandas series is essentially a 1D numpy array containing data of the same type, while a dataframe is a 2D array consisting of individual series. A dataframe can ingest data from a CSV file in a 'smart' way i.e., it can parse the data and handle missing data very well. Here's how to create a dataframe out of the drive.csv file:
+
+\begin{lstlisting}[frame=single] 
+import numpy as np
+import pandas as pd
+
+df = pd.read_csv('../data/drive.csv')
+df.head()
+\end{lstlisting}
+
+The first two lines import numpy and pandas (pandas requires numpy), with pd being ht usual alias. Then, a dataframe \code{df} was created and data from the data.csv file was passed to it using the \code{read\_csv()} function. Pandas is great at instantly visualizing data - the \code{head()} member function of any dataframe shows the first five entries. Try it and see. The first row of the dataframe contains headers, which as we'll see, are very useful to access data. Let's get some information about the dataframe:
+
+\begin{lstlisting}[frame=single] 
+print(df.shape, df.columns, df.dtypes)
+df['Game Code'][10:25]
+df.describe()
+\end{lstlisting}
+
+Three properties of the dataframe were analyzed:
+
+\begin{itemize}
+	\item \code{shape} is similar to numpy's \code{shape}, which returns the dimensions of the dataframe
+	\item \code{columns} returns a list of column headers
+	\item \code{dtypes} returns the data type of each columns, as interpreted by \code{csv\_reader()}
+\end{itemize}
+
+Individual columns can be accessed using the column header, as shown in the second line of the code above. This is a particularly useful feature, because it allows the programmer to avoid having to remember the index of a column, and also makes the code more readable. Multiple columns can be accessed at the same time by separating their headers with a comma. Once a column(s) has been accessed, individual rows can be sliced as usual. Pandas furthermore has a \code{describe()} function that gives a quick statistical summary of the data in each column.
+
+\subsection{Cleaning Data}
+As is often the case, the dataset has some missing values. The \code{isna()} function returns a Boolean value, which is \code{True} if an element is missing (thus it returns as many values as there are elements). This isn't particularly useful for a big dataset since we can't really check each and every value, but we can then sum up the total number of \code{True}'s (which are converted to a integer 1, while \code{False] becomes 0} for each columns to see how many missing values we have in each, by applying the \code{sum()} function. We can do this with just one line of code:
+
+\begin{lstlisting}[frame=single] 
+df.isna().sum()
+\end{lstlisting}
+
+We see that there are some missing values in the Start Clock, End Clock, and Time of Possession columns, though the number is small as compared to the size of the dataset. There are many ways to handle missing data, but in this case, since only a small number of values are missing, we can simply drop the rows that have any missing values using the \code{dropna()} function:
+
+\begin{lstlisting}[frame=single] 
+df = df.dropna()
+\end{lstlisting}
+
+Note that \code{dropna()} returns a cleaned-up dataframe, which we then use to overwrite the existing one. We can now analyze this cleaned up dataframe.
+
+
+\subsection{Challenge: Analyzing Data}
+The \code{describe()} function is good for providing a quick summary of all the data, but we often want to ask specific questions from it. In this challenge, we'll look to analyze the data to answer three questions:
+
+\begin{enumerate} 
+	\item What was the distribution of the ways that drives ended? 
+	\item Of the drives that ended in a touchdown, what was the distribution of the time of possession?
+	\item Which team made the most yards per play on average?
+\end{enumerate}
+
+The first question is easily answered. Here's my short solution:
+
+\begin{lstlisting}[frame=single] 
+N = df['End Reason'].count()
+df['End Reason'].value_counts()*100./N
+\end{lstlisting}
+
+Essentially, the problem boils down to figuring out the number of unique values in the 'End Reason' column. This column contains categorical information, so this operation is valid (it would not be valid on a column with continuous data like floats). The \code{value\_counts()} function does just that, and then we normalize it as a percentage of the total. We see that over half of all drives ended in punts and touchdowns, while only a minuscule fraction ended in a safety.
+
+The second question involves two steps: extracting only those rows where the 'End Reason' is a touchdown, and then finding descriptive statistics of the time of possession (this is a float data type, so we can apply descriptive statistics to it, not just value counts). Here is my solution:
+
+\begin{lstlisting}[frame=single] 
+td = df[df['End Reason']=='TOUCHDOWN']
+td['Time Of Possession'].describe()
+\end{lstlisting}
+
+First, we create a mask for all those rows where 'End Reason' is a touchdown. This is exactly the same as creating masked arrays in numpy (indeed, it is built on top of it). Then, we pass this mask to the dataframe itself, which returns only those rows where the make is \code{True}. We save these rows to a new dataframe called \code{td}. Now, we just take the 'Time of Possession' column of this new dataframe and use the \code{describe()} function get get its distribution. We see that on average, each drive saw the offense in possession for about 159 sec (about 2.6 minutes). 
+
+The third question is more complicated, partly because it involves a new variable (yards per play) that isn't already in the dataframe, and partly because we need to group the data by team before we can analyze it. Here's my solution:
+
+\begin{lstlisting}[frame=single] 
+df['Yards Per Play'] = df['Yards']/df['Plays']
+teams_grouped = df.groupby(['Team Code'])
+teams_grouped_mean = 
+	teams_grouped['Yards Per Play'].mean()
+teams_grouped_mean.sort_values(ascending=False).head()
+\end{lstlisting}
+
+The first step is to calculate the yards per play of each drive, for which we define a new series, 'Yards Per Play', just as we would do in a numpy array. The difference is that in this case, the operation on the first line both creates the new series \textit{and} adds it to the dataframe (whereas in numpy, we'd have to append it separately). So that takes care of the first difficulty. The second step requires us to group the data by team (represented by the 'Team Code' column). This can be fairly complicated to do on a spreadsheet program, but pandas has a \code{groupby()} function, which creates a special grouped dataframe \code{teams\_grouped} for one or more columns passed to it. This grouped dataframe doesn't actually have any data yet (it does have access to all the data in the original dataframe from which it was created though) - but when any function is applied to it, it returns values of the function grouped by those columns.
+
+So, armed with this grouped data frame, we tell it to take the mean of the 'Yards Per Play' column - and it returns a series \code{teams\_grouped\_mean} that has the mean of those columns corresponding to each team. However, the question was which team had the most yards per play on average, so we need to sort this data. That's what we do in the last line, sorting in descending order, and then using \code{head()} to see just the top five results. From the results, we see that Team 2 has the best performance, making about 10.6 yards per play - pretty impressive!
+
+Pandas can do much more. Analysis that would take a lot of time and effort by hand or even on a spreadsheet can be completed in just a few lines of code. And the cherry on top is that Pandas can use matplotlib to visualize the data too. That's why it is one of the most popular libraries used by data scientists. 
+
+\newpage
+\section{Conclusion}
+\subsection{Reminiscence}
+Teaching is an extremely challenging but enormously rewarding profession. I once met a sprightly young freshman that was struggling with a homework problem - a Python code, no less - and asked for help. I sat down with them, talked about a plausible algorithm, which he dutifully typed in. And right on queue, it threw up an error! We spent the next few minutes (mostly on Google) figuring out what the syntactical error was, and once we fixed it (turns out I was using the wrong function to append data to a list), it worked. 
+
+My young friend's reaction after the code worked is what caught my attention though, something on the lines of "so do I really need to keep searching for commands on Google all the time?" Unfortunately, their memory of that homework problem remained the struggle of finding the right syntax, and not the discussion we had about the algorithm to solve the problem. Not my finest hour of tutoring. 
+
+\subsection{Next Steps}
+Why did I share that anecdote? Because I want to emphasize that \textit{programming} and \textit{coding} are not the same thing. Initially, you'll find that you're just struggling to find the right function and trying to second-guess the people that created the program, instead of focusing on the actual problem itself. Even though Python has probably the simplest syntax of all mainstream programming languages, it too can take some time to get used to. 
+
+But eventually, with enough practice, you'll find yourself being able to recollect functions with ease. This is \textit{not} because you've somehow memorized them, although that would seem to be the case. It's because you've learned to \textit{think} like a programmer, like the people who created the language. At that point, the code will not only seem natural, it will seem obvious - 'of course this is the best way to do it!' It's at that point that you go from writing code to writing a program. 
+
+How do you get there? Like Dan LaRusso did in \textit{The Karate Kid}. By trying, failing, and trying again, until you can do it on just one leg. Enjoy the ride!
+
 \end{document}
