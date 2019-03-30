@@ -1021,5 +1021,170 @@ Matplotlib has many more options for 1D, 2D, and 3D plots than described here. H
 
 \newpage
 \section{Scipy}
+Numpy and matplotlib form the basis for most other scientific computing libraries in Python. One of the most popular libraries to build on them is Scipy, a Scientific Python library with implementations of specific functions that are often used in science and engineering. Specifically, Scipy has packages that can be used for the following applications:
 
+\begin{tabular}{|p{1.5in}|p{3in}|}
+\hline
+\textbf{Package} & \textbf{Application} \\ \hline
+scipy.cluster & Clustering (K-means) and vector quantization \\ \hline
+scipy.constants & Mathematical constant \\ \hline
+scipy.fftpack & Fast Fourier Transform \\ \hline
+scipy.integrate & Integration \\ \hline
+scipy.interpolate & Interpolation \\ \hline
+scipy.io & Input/Output \\ \hline
+scipy.linalg & Linear Algebra \\ \hline
+scipy.ndimage & Image analysis \\ \hline
+scipy.odr & Orthogonal regression \\ \hline
+scipy.optimize & Optimization \\ \hline
+scipy.signal & Signal processing \\ \hline
+scipy.sparse & Sparse matrix manipulation \\ \hline
+scipy.spatial & Spatial data and algorithms \\ \hline
+scipy.special & Special functions \\ \hline
+scipy.stats & Statistics \\ \hline
+\end{tabular}
+
+Scipy is written using numpy, and the two libraries share much in common (including contributors). In fact, some packages can be found in both libraries, such as the \code{linalg} package. However, in general, scipy tends to have a wider suite of functions than numpy. In the following pages, we'll see how to use scipy for three common applications: curve fitting, image analysis, and fourier transforms.
+
+\subsection{Challenge: Curve Fitting}
+Scipy's functions for optimization and fitting are found under \code{scipy.optimize}. Specifically, the curve fitting function is \code{curve\_fit()}, which fits data to a function with non-linear least squares optimization (see \href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html}{documentation}. In this challenge, we'll see how to use this function to fit rainfall data to an empirical intensity-duration-frequency (IDF) curve equation. The specific curve we'll be looking to fit the data to is the empirical function develop by Chow et al:
+
+$$
+I(t) = \frac{a}{t^n+c}
+$$
+
+Where $I(t)$ is the intensity of precipitation in inches per hour, $t$ is the duration of rainfall in minutes, and $a,n,c$ are empirical coefficients that are a function of the frequency (return period) that have to be determined using curve fitting. Data for this challenge was obtained from NOAA for the Champaign hydrological station and can be found in the idf.csv file in the data folder.
+
+Here is my solution:
+\begin{lstlisting}[frame=single] 
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
+
+def idf(t,a,n,c):
+    '''
+    Chow et al IDF relationship
+    '''
+    return a/((t**n)+c)
+
+#Get data
+data = np.loadtxt('../data/idf.csv',
+	skiprows=1,dtype=np.float,delimiter=',')
+period = data[0,1:] #return period in years
+duration = data[1:,0] #duration in hr
+intensity = data[1:,1:] #intensity in in/hr
+
+#Fit curves
+popt = [] #optimized parameters
+pcov = [] #covariance matrices
+
+for i in range(len(period)):
+    p = curve_fit(idf,duration,intensity[:,i])
+    popt.append(p[0])
+    pcov.append(p[1])
+    
+    plt.loglog(duration,
+    	idf(duration,p[0][0],p[0][1],p[0][2]),
+    	label=str(int(period[i]))+' yr')
+
+plt.xlabel('Duration (hours)')
+plt.ylabel('Intensity (in/hr)')
+plt.title('IDF curves for Champaign, IL')
+plt.grid(which='both',linestyle='--')
+plt.legend()
+plt.show()
+\end{lstlisting}
+
+That's quite a lot of code! Let's break it down. The first three lines import the usual libraries and functions. Then, we define a function \code{idf()} that represents the Chow curve, which returns the intensity for a given set of inputs. Now, the next part of the code is a little messy, but it's just getting the data from the idf.csv file using numpy's \code{loadtxt()} as single numpy array, and then slicing the array to get the return period (a vector), duration (another vector), and intensity (a 2D matrix). Look at the form of the data in the CSV file and the slicing should make sense. Note that each row of the intensity matrix represents the precipitation intensity for a given duration over all return periods (i.e., return period is in columns and duration is in rows).
+
+Now we finally get to the curve fitting from line 18 onward. If you see the documentation of the \code{curve\_fit()} function, you'll see that it returns two numpy arrays: an array of the optimized parameters and another one with a covariance matrix of those parameters. These vary for each return period, so we'll store them in a list (the list will hold numpy arrays). The lists are initialized, and then we enter a loop, where the curve fitting is performed for each return period, and a line is added to a log-log plot for the fitted IDF curve. The curve fitting function takes in three inputs: the \code{idf()} function, duration, and intensity. The function assumes that \code{duration} is the independent data, \code{intensity} is the dependent data, and the rest of the inputs to \code{idf()} are the parameters to be fitted. The function then returns the optimized parameters and covariance matrix, which are then appended to the appropriate list and also used to plot the fitted curve.
+
+After the loop, we add some paraphernalia to the curve and plot it. Thus, we have a series of IDF curves from the data. 
+
+\subsection{Challenge: Image Analysis}
+Image analysis is an important scientific skill, and several commercial and open-source programs are available for it. However, at their heart, all image analysis programs implement matrix manipulation algorithms. After all, an image is nothing but a matrix, with each element representing the intensity of a pixel (in one or more channels). Scipy's ndimage package offers useful image analysis functions, which we'll use in this challenge. 
+
+The challenge is to take the otter.png grayscale image provided in the data folder (courtesy of Wikimedia Commons), and perform the following manipulations on it:
+
+\begin{itemize}
+	\item Rotate it by 10$^o$ anti-clockwise
+	\item Sharpen it
+	\item Detect its edges
+\end{itemize}
+
+Here is my solution:
+
+\begin{lstlisting}[frame=single] 
+from scipy.ndimage import gaussian_filter, rotate, sobel
+
+img = plt.imread('../data/otter.png')
+plt.subplot(2,2,1)
+plt.imshow(img,cmap='gray')
+plt.axis('off')
+
+img_rotate = rotate(img,angle=10)
+plt.subplot(2,2,2)
+plt.imshow(img_rotate,cmap='gray')
+plt.axis('off')
+
+img_filter = gaussian_filter(img_rotate,sigma=3)
+img_sharp = img_rotate + 30.*(img_rotate-img_filter)
+plt.subplot(2,2,3)
+plt.imshow(img_sharp,cmap='gray')
+plt.axis('off')
+
+sx = sobel(img_sharp, axis=0)
+sy = sobel(img_sharp, axis=1)
+img_sobel = np.hypot(sx,sy)
+plt.subplot(2,2,4)
+plt.imshow(img_sobel,cmap='gray')
+plt.axis('off')
+
+plt.show()
+\end{lstlisting}
+
+This program is straightforward: it applies each of the required manipulations and shows the final image. First, the necessary functions are imported. Then, the file is read using pyplot's \code{imread()} function. While ndimage also has a similar function, it has been deprecated, and pyplot's function is recommended. This returns a numpy array of the intensity values of each pixel (since the image is grayscale, there is only one channel). This is then plotted in a subplot using pyplot's \code{imshow()} function.
+
+Now, the first manipulation is to rotate the image, which is done using ndimage's \code{rotate()} function, and the resulting image is plotted. Under the hood, the function simply multiplies the numpy array of the image by a rotation operator (another matrix) and returns the result. 
+
+The second manipulation is to sharpen the image. Sharpening involves enhancing sharp edges in an image and suppressing other parts of it. So first, we need to extract the sharp edges of the image, which can be done by applying a low-pass gaussian filter with the \code{gaussian\_filter()} function, and then turning it into a high-pass filter by subtracting it from the rotated image. These sharp edges are then enhanced by a factor (30) and added to the rotated image, which gives a sharpened image. This is then plotted. 
+
+Finally, the last manipulation is edge detection, for which there are many algorithms available. I chose to use a \href{https://en.wikipedia.org/wiki/Sobel_operator}{Sobel filter} using ndimage's \code{sobel()} function. The final image of edges is then plotted. Note that for each of the plots, pyplot by default creates axes, which doesn't make sense for an image. There are thus turned \code{off}.
+
+And... that's it! It was that simple - just a series of matrix manipulations, with the convolution kernels conveniently created by ndimage's functions. On it's own, this is a powerful utility, but ndimage isn't even the best image processing library around. That title arguably goes to scikit-image, which you should explore further if you are looking to use Python for image analysis. 
+
+\subsection{Challenge: Fourier Transform}
+Fourier transforms are commonly used in signal processing to convert data from a time domain to a frequency domain. This, in turn, has a wide variety of applications, from file compression to spectroscopy. Fourier transforms are actually very cumbersome to evaluate, and was a major computing challenge until the invention/discovery of the Fast Fourier Transform (FFT) algorithm, also called the Cooley-Tukey Algorithm. Strictly speaking, this is a discrete FFT algorithm, as it works on discrete data. Together with its inverse, it is probably one of the most important algorithms of the last century, and is implemented in every major scientific analysis program, including Scipy's code{scipy.fftpack} package. 
+
+In this challenge, we'll take signal data and determine the main frequencies in it by converting it from the time domain to the frequency domain. The data is provided in the cat.csv file, which was created from the sound of cats meowing in the cat.wav file. Here's my solution:
+
+\begin{lstlisting}[frame=single] 
+from scipy.fftpack import fft
+t,sig = np.loadtxt('../data/cat.csv', 
+	unpack=True,skiprows=1,
+	dtype=np.float,delimiter=',')
+
+plt.subplot(2,1,1)
+plt.plot(t,sig)
+plt.xlabel('Time (s)')
+plt.ylabel('Amplitude')
+
+spec = fft(sig)
+T = t[1]-t[0]
+N = sig.size
+freq = np.linspace(0,1.0/T,N)
+plt.subplot(2,1,2)
+plt.plot(freq[:N//2]/1000.,
+	np.abs(spec)[:N//2]*1.0/np.max(np.abs(spec)))
+plt.xlabel('Frequency (kHz)')
+plt.ylabel('Power')
+plt.grid()
+
+plt.show()
+\end{lstlisting}
+
+The first line imports the \code{fft()} function, while the second line imports the data and unpacks it. Then, the data is plotted in the first subplot. We're now set to convert the data into the frequency domain, which is done simply by passing the signal to the \code{fft()} function. Then, we convert the time into frequency. If you know a little bit of Fourier Transform, you'll know that you only really need half of this data, as the other half is simply the complex conjugate. That's why only half the data is plotted, while the power in the frequency domain is also normalized. If we plot this, we can see a clear frequency that dominates over all others, even though the time-domain plot had no clear pattern. Thus, in a few short lines of code, scipy's fftpack was able to perform a frequency-domain analysis for us, and also create some nice plots!
+
+\newpage
+\section{Pandas}
+Data science is a fast-growing field that is spreading its tentacles to virtually every traditional field: from railroads to agriculture to the social sciences, data is the currency of the digital millennium. But while we may have a lot of data, it can quickly become difficult to analyze it with enough confidence to make decisions. That's a gap that data science is trying to fill, and one of the most popular tools in it is the pandas Python library. 
 \end{document}
