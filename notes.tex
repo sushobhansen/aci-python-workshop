@@ -104,9 +104,9 @@ At the end of the \textbf{Advanced Python} session, participants will be able to
 
 \begin{enumerate}
 	\item Use the \code{numpy} library to define and use matrices, and read and process data from files
-	\item Use the \code{pandas} library to read and process data
-	\item Use the \code{scipy} library to solve a system if linear equations and implement other useful scientific functions
-	\item Use the \code{matplotlib} library to create publication-quality plots
+	\item Use the \code{pandas} library to read and analyze data
+	\item Use the \code{scipy} library to process an image, analyze a sound wave, and fit data to a curve
+	\item Use the \code{matplotlib} library to create publication-quality plots for 1D, 2D, and 3D data
 \end{enumerate}
 
 The lists above ware what I will try to accomplish in our two two-hour long sessions. Depending on how quickly the workshop goes, I may or may not be able to meet all the learning objectives. However, I will get you along far enough so that you can complete any remaining items on your own.
@@ -1100,8 +1100,8 @@ Now we finally get to the curve fitting from line 18 onward. If you see the docu
 
 After the loop, we add some paraphernalia to the curve and plot it. Thus, we have a series of IDF curves from the data. 
 
-\subsection{Challenge: Image Analysis}
-Image analysis is an important scientific skill, and several commercial and open-source programs are available for it. However, at their heart, all image analysis programs implement matrix manipulation algorithms. After all, an image is nothing but a matrix, with each element representing the intensity of a pixel (in one or more channels). Scipy's ndimage package offers useful image analysis functions, which we'll use in this challenge. 
+\subsection{Challenge: Image Processing}
+Image processing is an important scientific skill, and several commercial and open-source programs are available for it. However, at their heart, all image processing programs implement matrix manipulation algorithms. After all, an image is nothing but a matrix, with each element representing the intensity of a pixel (in one or more channels). Scipy's ndimage package offers useful image analysis functions, which we'll use in this challenge. 
 
 The challenge is to take the otter.png grayscale image provided in the data folder (courtesy of Wikimedia Commons), and perform the following manipulations on it:
 
@@ -1281,15 +1281,15 @@ Pandas can do much more. Analysis that would take a lot of time and effort by ha
 \newpage
 \section{Conclusion}
 \subsection{Reminiscence}
-Teaching is an extremely challenging but enormously rewarding profession. I once met a sprightly young freshman that was struggling with a homework problem - a Python code, no less - and asked for help. I sat down with them, talked about a plausible algorithm, which he dutifully typed in. And right on queue, it threw up an error! We spent the next few minutes (mostly on Google) figuring out what the syntactical error was, and once we fixed it (turns out I was using the wrong function to append data to a list), it worked. 
+Teaching is an extremely challenging but enormously rewarding profession. I once met a sprightly young freshman that was struggling with a homework problem - a Python code, no less - and asked for help. I sat down with them, talked about a plausible algorithm, which they dutifully typed in. And right on queue, it threw up an error! We spent the next few minutes (mostly on Google) figuring out what the syntactical error was, and once we fixed it (turns out I was using the wrong function to append data to a list), it worked. 
 
 My young friend's reaction after the code worked is what caught my attention though, something on the lines of "so do I really need to keep searching for commands on Google all the time?" Unfortunately, their memory of that homework problem remained the struggle of finding the right syntax, and not the discussion we had about the algorithm to solve the problem. Not my finest hour of tutoring. 
 
 \subsection{Next Steps}
-Why did I share that anecdote? Because I want to emphasize that \textit{programming} and \textit{coding} are not the same thing. Initially, you'll find that you're just struggling to find the right function and trying to second-guess the people that created the program, instead of focusing on the actual problem itself. Even though Python has probably the simplest syntax of all mainstream programming languages, it too can take some time to get used to. 
+Why did I share that anecdote? Because I want to emphasize that \textit{programming} and \textit{coding} are not the same thing. Initially, you'll find that you're just struggling to find the right function and trying to second-guess the people that created the program, instead of focusing on the actual problem itself. Even though Python probably has the simplest syntax of all mainstream programming languages, it too can take some time to get used to. 
 
-But eventually, with enough practice, you'll find yourself being able to recollect functions with ease. This is \textit{not} because you've somehow memorized them, although that would seem to be the case. It's because you've learned to \textit{think} like a programmer, like the people who created the language. At that point, the code will not only seem natural, it will seem obvious - 'of course this is the best way to do it!' It's at that point that you go from writing code to writing a program. 
+But eventually, with enough practice, you'll find yourself being able to recollect functions with ease. This is \textit{not} because you've somehow memorized all of them, although that might be a secondary effect. It's because you've learned to \textit{think} like a programmer, like the people who created the language. At that point, the code will not only seem natural, it will seem obvious - 'of course this is the best way to do it!' It's at that point that you go from writing code to writing a program. 
 
-How do you get there? Like Dan LaRusso did in \textit{The Karate Kid}. By trying, failing, and trying again, until you can do it on just one leg. Enjoy the ride!
+How do you get there? Like Dan LaRusso did in \textit{The Karate Kid}. By trying, failing, and trying again, until you can do it on just one leg (although you may need to keep your eyes open). Enjoy the ride!
 
 \end{document}
