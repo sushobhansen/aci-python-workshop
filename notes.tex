@@ -141,8 +141,8 @@ Integer & \code{x = 5} & Signed integer & Use \code{int} to typecast, if valid \
 Float & \code{x = 5.} & IEEE floating point number & Use \code{float} to typecast, if valid \\ \hline
 Complex & \code{x = 3.1+4.6j} & Complex number & Use \code{complex} to typecast, if valid \\ \hline
 String & \code{x = 'Hello World!'} & Strings are always enclosed within quotation marks & Use \code{str} to typecast, slicing operator valid \\ \hline
-List & \code{x = [1, 2.2, 'otter']} & \textbf{Mutable} list of variables of any type & Use \code{list()} to typecast, if valid \\ \hline
-Tuple & \code{x = (1, 2.2, 'otter')} & Immutable tuple of variables of any tupe & Use \code{tuple()} to typecast, if valid \\ \hline
+List & \code{x = [1, 2.2, 'otter']} & List of variables of any type & Use \code{list()} to typecast, if valid \\ \hline
+Tuple & \code{x = (1, 2.2, 'otter')} & Tuple of variables of any tupe & Use \code{tuple()} to typecast, if valid \\ \hline
 Dictionary & \texttt{x = \{'one':1, 'two':2\}} & Key-value pairs & Use \code{get()} to get \code{value} from \code{key}, use \code{dict()} to typecast, if valid \\ \hline
 Bool & \code{x = True} & Boolean value & Python uses keywords \code{True} and \code{False}, not 1 and 0 \\ \hline
 
@@ -153,7 +153,7 @@ Bool & \code{x = True} & Boolean value & Python uses keywords \code{True} and \c
 Variables are usually given a name, which is any string of characters you use to call it. Any string of characters is a valid name, although there are a couple of rules to follow:
 
 \begin{enumerate}
-	\item The name \textbf{cannot} contain spaces - consider using an underscore character or chamelCase instead for readability
+	\item The name \textbf{cannot} contain spaces - consider using an underscore character or camelCase instead for readability
 	\item The name cannot start with a number, but can contain a number anywhere
 	\item The name is case-sensitive, so \code{temp} and \code{Temp} are different variables
 	\item Python has a number of reserved keywords (see documentation, of just follow along and you'll get the hang of it), which cannot be used as names
@@ -206,7 +206,7 @@ Python provides a number of operations that can be performed between variables:
 	\item \textbf{Arithmetic operators:} + (add), - (subtract), * (multiply), / (divide), \% (modulus or remainder), // (floor division), ** (exponent)
 	\item \textbf{Comparison operators:} $>$ (grater than), $<$ (less than), == (equal to), != (not equal to), $>=$ (greater than or equal to), $<=$ (less than or equal to)
 	\item \textbf{Logical operators:} \code{and}, \code{or}, and \code{not}
-	\item \textbf{Bitwise operators:} \& (bitwise AND), \textbar\ (bitwise OR), $\sim$ (bitwise NOT),  (bitwise XOR), $>>$ (bitwise right shift), $<<$ (bitwise left shift)
+	\item \textbf{Bitwise operators:} \& (bitwise AND), \textbar\ (bitwise OR), $\sim$ (bitwise NOT), \string^ (bitwise XOR), $>>$ (bitwise right shift), $<<$ (bitwise left shift)
 	\item \textbf{Assignment operators:} A combination of the basic assignment operator (=) and an optional arithmetic or bitwise operator. For example, \code{x **= 5} is the same as \code{x = x**5}
 	\item \textbf{Special operators:} \code{is} or \code{is not} check if two variables have the same memory address, \code{in} or \code{not in} check if a variable is in a sequences of variables
 \end{itemize}
