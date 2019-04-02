@@ -721,7 +721,7 @@ biopython & Biology \\ \hline
 astropy & Astronomy \\ \hline
 scikit-chem & Chemistry \\ \hline
 SymPy & Symbolic math (comparable to Mathematica) \\ \hline
-FiPy, OpenSeenPy & Finite element analysis \\ \hline
+FiPy, OpenSeesPy & Finite element analysis \\ \hline
 fluidity, fluidsim, fluiddyn, cfdpython & Computational fluid dynamics \\ \hline
 Py2B, pySerial, instrumentino & Arduoino programming and IoT \\ \hline
 pyfin, QuantPy, pynance, analyzer, pyfolio & Finance and trading \\ \hline
@@ -912,7 +912,7 @@ Note that the \code{\%matplotlib inline} command in the beginning is to that fig
 
 Barplots are generated using pyplot's \code{bar()} function (see \href{https://matplotlib.org/api/_as_gen/matplotlib.pyplot.bar.html}{documentation}). This function takes at least two arguments: the coordinates of the bars and the height of each bar. A number of optional parameters to define things like color, width, error bars, etc. are also available. However, the function on its own just generates a plot without any labels - not exactly publication quality yet. We can add labels to the axes using the \code{xlabel(), ylabel()} member functions of pyplot, and a title with the \code{title()} function. Since these are member functions, they are accessed through the dot operator. \textbf{Pro-tip:} the axis labels and title functions accept \LaTeX inputs.
 
-There are two more problems with this graph. On the x-axis, we would like to show only the bar number as a categorical value, instead of as a coordinate, since this is 1D data. We can do this by setting \code{xticks()} to the bar number. The y-axis scales automatically to the range of the heights, which is between 5 and 10. However, it's usually good practice to start the y-axis from zero instead. We can adjust this by setting the \code{ylin()} function to the appropriate range. Finally, we use the \code{show()} function to show the graph. And viola! In a few simple lines, we have a professional graph. If you've used MATLAB before, all the commands will seem very familiar, with just the extra \code{plt.} prefix. Play around with other options from the documentation to make your graph even better. 
+There are two more problems with this graph. On the x-axis, we would like to show only the bar number as a categorical value, instead of as a coordinate, since this is 1D data. We can do this by setting \code{xticks()} to the bar number. The y-axis scales automatically to the range of the heights, which is between 5 and 10. However, it's usually good practice to start the y-axis from zero instead. We can adjust this by setting the \code{ylim()} function to the appropriate range. Finally, we use the \code{show()} function to show the graph. And viola! In a few simple lines, we have a professional graph. If you've used MATLAB before, all the commands will seem very familiar, with just the extra \code{plt.} prefix. Play around with other options from the documentation to make your graph even better. 
 
 \subsection{Plotting 2D Data}
 Arguably the most common type of plot involves plotting the value of a dependent variable as a function of an independent one. This could be experimental data or data obtained from an analytic function. For example, let's say we want to plot the function $f(x) = (\sin(x)+\cos(x))/2$ in the range $[0^o,360^o]$. Here's the code to do that:
@@ -1027,7 +1027,7 @@ Numpy and matplotlib form the basis for most other scientific computing librarie
 \hline
 \textbf{Package} & \textbf{Application} \\ \hline
 scipy.cluster & Clustering (K-means) and vector quantization \\ \hline
-scipy.constants & Mathematical constant \\ \hline
+scipy.constants & Mathematical constants \\ \hline
 scipy.fftpack & Fast Fourier Transform \\ \hline
 scipy.integrate & Integration \\ \hline
 scipy.interpolate & Interpolation \\ \hline
