@@ -1,5 +1,5 @@
-# American Concrete Institute (ACI)-UIUC Student Chapter
-A repo for the Python workshop for ACI-UIUC (April 6, 2019)
+# IAHR and IWRA UIUC Student Chapters
+A repo for the Python workshop for IAHR and IWRA UIUC Student Chapters (October 5, 2019)
 
 This workshop will cover basic and advanced concepts of programming using the latest version of Python 3.x on IPython/Jupyter Notebooks. For instructions, please see the notes.pdf file.
 
