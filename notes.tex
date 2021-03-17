@@ -12,7 +12,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \rhead{Sushobhan Sen}
-\lhead{ACI-UIUC Python Workshop}
+\lhead{IAHR \& IWRA-UIUC Python Workshop}
 \cfoot{\thepage\ of \pageref{LastPage}}
 
 \usepackage{hyperref}
@@ -45,7 +45,7 @@
 
 \begin{titlepage}
 	\centering
-	{\LARGE American Concrete Institute (ACI)-UIUC Student Chapter}
+	{\LARGE IAHR \& IWRA UIUC Student Chapters}
 	\vspace{2cm}	
 	
 	\begin{Large}
@@ -58,7 +58,7 @@
 	Doctoral Candidate
 	\vspace{1cm}
 	
-	April 6, 2019
+	October 5, 2019
 	\vspace{1cm}
 	
 	Urbana, IL
@@ -77,7 +77,7 @@ Copyright \copyright\ 2019, Sushobhan Sen
 \subsection{Why Python?}
 The Python programming language was conceived in the 1980s and the first implementation was deployed in 1991 by Guido van Rossum at Centrum Wiskunde \& Informatica (CWI) in the Netherlands. Python is designed to be a high-level, interpreted, general-purpose computer programming language with exception-handling and the ability to be extended by users. Crucially, Python is an open-source language, meaning anybody can see the code behind it. Python today is a very popular language is a broad variety of disciplines: machine learning, web development, Geographical Information Systems (GIS), engineering, database management, high performance computing, etc.
 
-Python 2.0, which truly launched the popularity of the language, was released in 2000, with the last version in the series, Python 2.7, set to be phased out in 2020. The current recommended standard as of when I wrote this is Python 3.7.2, which is crucially \textbf{not backwards compatible} with Python 2.x. All subversions of Python 3.x are backwards compatible though, so feel free to update regularly.
+Python 2.0, which truly launched the popularity of the language, was released in 2000, with the last version in the series, Python 2.7, set to be phased out in 2020. The current recommended standard as of when I wrote this is Python 3.7.4, which is crucially \textbf{not backwards compatible} with Python 2.x. All subversions of Python 3.x are backwards compatible though, so feel free to update regularly.
 
 (The above information was taken from \href{https://en.wikipedia.org/wiki/Python_(programming_language)}{Wikipedia})
 
@@ -109,7 +109,7 @@ At the end of the \textbf{Advanced Python} session, participants will be able to
 	\item Use the \code{matplotlib} library to create publication-quality plots for 1D, 2D, and 3D data
 \end{enumerate}
 
-The lists above ware what I will try to accomplish in our two two-hour long sessions. Depending on how quickly the workshop goes, I may or may not be able to meet all the learning objectives. However, I will get you along far enough so that you can complete any remaining items on your own.
+The lists above are what I will try to accomplish in our two two-hour long sessions. Depending on how quickly the workshop goes, I may or may not be able to meet all the learning objectives. However, I will get you along far enough so that you can complete any remaining items on your own.
 
 \subsection{Installing Python}
 The easiest and \textbf{recommended} way to get all popular Python libraries and IDEs is by downloading and installing the latest \href{https://www.anaconda.com/distribution/}{Anaconda distribution} for your computer. Make sure to download the latest version corresponding to Python 3.x.
@@ -1220,7 +1220,7 @@ Three properties of the dataframe were analyzed:
 Individual columns can be accessed using the column header, as shown in the second line of the code above. This is a particularly useful feature, because it allows the programmer to avoid having to remember the index of a column, and also makes the code more readable. Multiple columns can be accessed at the same time by separating their headers with a comma. Once a column(s) has been accessed, individual rows can be sliced as usual. Pandas furthermore has a \code{describe()} function that gives a quick statistical summary of the data in each column.
 
 \subsection{Cleaning Data}
-As is often the case, the dataset has some missing values. The \code{isna()} function returns a Boolean value, which is \code{True} if an element is missing (thus it returns as many values as there are elements). This isn't particularly useful for a big dataset since we can't really check each and every value, but we can then sum up the total number of \code{True}'s (which are converted to a integer 1, while \code{False] becomes 0} for each columns to see how many missing values we have in each, by applying the \code{sum()} function. We can do this with just one line of code:
+As is often the case, the dataset has some missing values. The \code{isna()} function returns a Boolean value, which is \code{True} if an element is missing (thus it returns as many values as there are elements). This isn't particularly useful for a big dataset since we can't really check each and every value, but we can then sum up the total number of \code{True}'s (which are converted to a integer 1, while \code{False} becomes 0} for each columns to see how many missing values we have in each, by applying the \code{sum()} function. We can do this with just one line of code:
 
 \begin{lstlisting}[frame=single] 
 df.isna().sum()
