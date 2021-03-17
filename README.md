@@ -1,5 +1,5 @@
 # ASCE T&DI UIUC Student Chapter
-A repo for the Python workshop for ASCE T&DI UIUC Student Chapter, attended by students at the University of Illinois and the University of Pittsburgh (March 22 and 24, 2019).
+A repo for the Python workshop for ASCE T&DI UIUC Student Chapter, attended by students at the University of Illinois and the University of Pittsburgh (March 22 and 24, 2021).
 
 This workshop will cover basic and advanced concepts of programming using the latest version of Python 3.x on IPython/Jupyter Notebooks. For instructions, please see the notes.pdf file.
 
